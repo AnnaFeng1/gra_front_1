@@ -58,7 +58,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { login } from '@/api/auth';
+import { login, getUserInfo } from '@/api/auth';
 
 const router = useRouter();
 const loading = ref(false);
@@ -114,10 +114,32 @@ const handleLogin = async () => {
           localStorage.removeItem('rememberedUsername');
         }
         
-        ElMessage.success('登录成功');
-        
-        // 根据角色跳转到不同的首页
-        router.push('/dashboard');
+        // 获取用户信息，包括角色
+        const userInfoResponse = await getUserInfo();
+        if (userInfoResponse.code === 1) {
+          const userRole = userInfoResponse.data.role;
+          // 保存用户角色到localStorage
+          localStorage.setItem('userRole', userRole);
+          localStorage.setItem('userInfo', JSON.stringify(userInfoResponse.data));
+          
+          ElMessage.success('登录成功');
+          
+          // 根据角色跳转到不同的首页
+          if (userRole === 'admin') {
+            router.push('/admin-dashboard');
+          } else if (userRole === 'leader') {
+            router.push('/leader-dashboard');
+          } else if (userRole === 'ambassador') {
+            router.push('/dashboard');
+          } else {
+            // 未知角色，默认跳转到首页，系统会根据角色重定向
+            router.push('/');
+          }
+        } else {
+          ElMessage.error('获取用户信息失败');
+          // 清除登录状态
+          localStorage.removeItem('token');
+        }
       } else {
         ElMessage.error(response.msg || '登录失败，请检查用户名和密码');
       }

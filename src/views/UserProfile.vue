@@ -1,18 +1,7 @@
 <template>
   <div class="user-profile-container">
-    <!-- 页面顶部导航 -->
-    <div class="header">
-      <div class="logo">营销推广管理系统</div>
-      <div class="navigation-actions">
-        <el-button 
-          class="back-btn" 
-          @click="goToDashboard"
-          type="primary" 
-          plain>
-          <i class="el-icon-back"></i> 返回首页
-        </el-button>
-      </div>
-    </div>
+    <!-- 使用公共导航栏组件 -->
+    <LeaderNavBar activePage="profile" />
 
     <!-- 主要内容区域 -->
     <div class="main-content">
@@ -117,9 +106,13 @@ import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getUserProfile, updateUserProfile } from '@/api/user';
 import { logout as apiLogout } from '@/api/auth';
+import LeaderNavBar from '@/components/LeaderNavBar.vue';
 
 export default {
   name: 'UserProfile',
+  components: {
+    LeaderNavBar
+  },
   setup() {
     const router = useRouter();
     const formRef = ref(null);
@@ -443,40 +436,6 @@ export default {
   color: #2c3e50;
 }
 
-.header {
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 12px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: 600;
-  color: #409EFF;
-  letter-spacing: 0.5px;
-  font-family: var(--title-font);
-}
-
-.navigation-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
 .main-content {
   padding: 24px;
   display: flex;
@@ -648,10 +607,6 @@ export default {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .header {
-    padding: 12px 15px;
-  }
-  
   .welcome-section {
     flex-direction: column;
     align-items: flex-start;

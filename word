@@ -1,0 +1,1802 @@
+1.	 推广大使业绩查看的接口设计	
+1.1	获取用户基础信息
+1.1.1	基本信息
+请求路径: /api/ambassador/info 
+请求方式: GET
+鉴权方式: JWT Token
+1.1.2	请求参数
+无
+1.1.3	响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -username	String	非必须	用户名称
+    -role	String	非必须	用户角色
+    -team_name	Stirng	非必须	若是团队中的推广大使，则为团队名称，若是单独推广大使，此处可为空
+响应数据样例：
+
+ 
+1.2获取成长进度
+1.2.1基本信息
+请求路径: /api/ambassador/progress
+请求方式: GET
+鉴权方式: JWT Token
+1.2.2请求参数
+无
+1.2.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -current_count	number	非必须	当前该推广大使已成功推广的人数
+    -required_count	number	非必须	需要的推广人数，可直接设为50
+响应数据样例：
+
+
+ 
+1.3获取营期信息
+1.3.1基本信息
+请求路径: /api/ambassador/camp/current
+请求方式: GET
+鉴权方式: JWT Token
+1.3.2请求参数
+参数名	类型	是否必须	备注
+camp_id	Integer	必须	营期的对应ID，默认为（1001）
+
+1.3.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -camp_period_id	number	必须	数据库中营期表的id
+    -camp_name	String	必须	营期名称
+    -start_date	String	必须	营期起始时间
+    -end_date	Stirng	必须	营期结束时间
+响应数据样例：
+
+
+ 
+1.4获取推广层级
+1.4.1基本信息
+请求路径: /api/ambassador/promotion/level
+请求方式: GET
+鉴权方式: JWT Token
+1.4.2请求参数
+参数名	类型	是否必须	备注
+camp_period_id	int	必须	指定查询的营期
+
+1.4.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -level	string	非必须	当前用户在此营期中的层级
+响应数据样例：
+
+
+ 
+1.5获取成功推广数
+1.5.1基本信息
+请求路径: /api/ambassador/camp/count
+请求方式: GET
+鉴权方式: JWT Token
+1.5.2请求参数
+参数名	类型	是否必须	备注
+camp_period_id	number	必须	指定查询的营期
+
+1.5.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -camp_period_id	number	必须	数据库中营期表的id
+    -success_count	number	必须	该营期中用户成功推广的大使数
+响应数据样例：
+
+
+ 
+1.6获取佣金总额
+1.6.1基本信息
+请求路径: /api/ambassador/commission/total
+请求方式: GET
+鉴权方式: JWT Token
+1.6.2请求参数
+参数名	类型	是否必须	备注
+camp_period_id	number	必须	指定查询的营期
+
+1.6.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -camp_period_id	number	必须	数据库中营期表的id
+    -total_amount	number	必须	该营期中用户所获得的佣金总额
+响应数据样例：
+
+
+
+ 
+1.7获取佣金明细
+1.7.1基本信息
+请求路径: /api/ambassador/commission/detail
+请求方式: GET
+鉴权要求：JWT Token（仅限推广大使角色访问）
+1.7.2请求参数
+参数名	类型	是否必须	备注
+camp_period_id	number	必须	指定查询的营期
+
+1.7.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -commisioin_type	string	必须	始终为“直接转化佣金”
+    -camp_period_id	number	必须	该佣金明细的营期
+-details	array	必须	明细的列表
+    --customer_id	number	必须	客户ID
+    --customer_name	string	必须	客户姓名
+    --commision_amount	number	必须	该客户的佣金金额
+    --time	string	必须	数据库中表项加入时的时间
+   -total——commision	number	必须	该用户营期的总佣金（details中所有客户佣金金额的总和）
+响应数据样例：
+
+
+ 
+1.8提交晋升申请
+1.8.1基本信息
+请求路径: /api/ambassador/promotion/apply
+请求方式: POST
+1.8.2请求参数
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+
+1.8.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+响应数据样例：
+
+
+ 
+1.9离开团队
+1.9.1基本信息
+请求路径: /api/ambassador/team/leave
+请求方式: POST
+1.9.2请求参数
+无
+1.9.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+响应数据样例：
+
+
+
+
+2.	推广大使长的接口设计
+2.0获取推广大使长个人业绩统计
+2.0.1基本信息
+请求路径: /api/leader/performance/statistics
+请求方式: GET
+鉴权方式: JWT Token
+2.0.2请求参数
+参数名	类型	是否必须	备注
+camp_id	number	必须	默认为1001
+2.0.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+Data	Object	非必须	返回的数据
+    -campId	string	必须	营期的id
+    -campName	number	必须	营期的名称
+    -startDate	string	必须	营期开始时间
+    -endDate	string	必须	营期结束时间
+    -totalCommission	Decimal	必须	此营期内总佣金金额
+    -totalConvertions	Integer	必须	此营期内自己转换数
+响应数据样例：
+{
+  {
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "camp_id": "1001",
+        "camp_name": "2025年第2季度营销活动",
+        "start_date": "2025-04-07 11:43:55",
+        "end_date": "2025-05-07 11:43:55",
+        "total_commission": 1470.00,
+        "total_conversions": 2
+    }
+}
+   
+  }
+}
+
+
+2.1获取团队总览信息
+2.1.1基本信息
+请求路径: /api/leader/team/overview
+请求方式: GET
+鉴权方式: JWT Token
+2.1.2请求参数
+参数名	类型	是否必须	备注
+camp_id	Integer	必须	默认营期id为·1001
+
+2.1.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -team_id	Integer	必须	团队的id
+    -team_name	String	必须	团队名称
+    -success_count	number	必须	数据库里该团队中所有成员的成功转化数的总和（统计user_promotion_history中当前营期所有成员success_count的总和）
+    -total_commission	BigDecimal	必须	团队在该营期的总佣金
+-member_count	Integer	必须	团队成员数量
+-camp_period_id	Integer	必须	营期ID
+-camp_name	String	    必须	营期名称
+    -start_date	DateTime	必须	营期起始时间
+    -end_date	DateTime	必须	营期结束时间
+-avg_commission	BigDecimal	必须	团队平均佣金（总佣金/成员数）
+-leader_id	Integer	必须	团队负责人id
+-leader_name	String	必须	团队负责人姓名
+响应数据样例：
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "team_id": 10,
+    "team_name": "尔玛团队",
+    "success_count": 120,
+    "total_commission": 36000.00,
+    "member_count": 5,
+    "camp_period_id": 1001,
+    "camp_name": "2024年第2季度营销活动",
+    "start_date": "2024-04-01T00:00:00",
+    "end_date": "2024-06-30T23:59:59",
+    "avg_commission": 7200.00,
+    "leader_id": 101,
+    "leader_name": "张团长"
+  }
+}
+
+（默认营期为1001）
+
+
+
+2.2获取目标营期团队成员数据
+2.2.1基本信息
+请求路径: /api/leader/team/member
+请求方式: GET
+鉴权方式: JWT Token
+2.2.2请求参数
+无
+2.2.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    --user_id	number	必须	推广大使的唯一标识（指团队中的推广大使）
+    --username	String	必须	推广大使名称
+    --success_count	Number	必须	该推广大使在该最近营期的推广成功数
+响应数据样例：
+{
+  "code": 1,
+  "msg": "success",
+  "data": [
+    {
+      "user_id": 101,              // 用户ID（关联users表）
+      "username": "赵琳",           // 用户名称
+      "success_count": 15,         // 当前营期成功推广数（来自user_promotion_history.success_count）
+      "total_commission": 9600.00, // 当前营期总佣金（来自user_promotion_history.total_commission）
+    },
+    {
+      "user_id": 102,
+      "username": "慧杰",
+      "success_count": 13,
+      "total_commission": 7500.00,
+    }
+  ]
+}
+
+
+
+
+2.3获取推广大使长个人佣金明细数据
+2.3.1基本信息
+请求路径: /api/leader/commissions
+请求方式: GET
+鉴权方式: JWT Token
+2.3.2请求参数
+参数名	类型	是否必须	备注
+camp_id	number	必须	默认为214
+2.3.3响应数据
+参数格式：application/json参数说明：
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -camp_id	string	必须	始终为“直接转化佣金”
+    -camp_name	number	必须	该佣金明细的营期
+    -start_date	string	必须	营期开始时间
+    -end_date	string	必须	营期结束时间
+-details	array	必须	明细的列表
+    --commission_id	number	必须	此条佣金信息的ID
+    --commission_type	string	必须	佣金的类型('ambassador_conversion', 'leader_team_conversion', 'promotion_bonus_fixed', 'promotion_bonus_percentage')
+    --promoted_ambassador_id	number	非必须	若此条佣金明细为晋升奖励佣金（'promotion_bonus_fixed', 'promotion_bonus_percentage'），则此处会给出成功晋升的原推广大使的id
+    --order_id	number	非必须	若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处为关联外部系统订单ID（订单数据由外部接口提供）
+    --customer_id	number	非必须	若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处为被成功推广转化的客户的ID
+    --tier	string	非必须	分级层级，对应于commissions表中的tier，若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处必填
+   --commission_amount	Number	必须	此条佣金明细所对应的明确金额
+   --created_time	String	必须	此条佣金明细的创建时间
+
+
+响应数据样例：
+{
+  "code": 1,
+  "msg": "数据获取成功",
+  "data": {
+    "camp_id": "直接转化佣金",
+    "camp_name": "2025Q1精英营",
+    "start_date": "2025-01-01T00:00:00",
+    "end_date": "2025-03-31T23:59:59",
+    "details": [
+      // 1. 直接推广佣金（ambassador_conversion）
+      {
+        "commission_id": 1001,
+        "commission_type": "ambassador_conversion",
+        "order_id": 20001,
+        "customer_id": 3280,
+        "tier": "junior",
+        "commission_amount": 500.00,
+        "created_time": "2025-01-05T14:30:00"
+      },
+      
+      // 2. 团队推广佣金（leader_team_conversion）
+      {
+        "commission_id": 1002,
+        "commission_type": "leader_team_conversion",
+        "order_id": 20002,
+        "customer_id": 3280,
+        "tier": "senior",
+        "commission_amount": 1200.00,
+        "created_time": "2025-01-10T09:15:00"
+      },
+
+      // 3. 晋升固定奖励（promotion_bonus_fixed）
+      {
+        "commission_id": 1003,
+        "commission_type": "promotion_bonus_fixed",
+        "promoted_ambassador_id": 88,
+        "commission_amount": 3000.00,
+        "created_time": "2025-02-01T00:00:00"
+      },
+
+      // 4. 晋升比例奖励（promotion_bonus_percentage）
+      {
+        "commission_id": 1004,
+        "commission_type": "promotion_bonus_percentage",
+        "promoted_ambassador_id": 89,
+        "commission_amount": 15000.00,
+        "created_time": "2025-03-15T11:20:00"
+      }
+    ]
+  }
+}
+
+
+2.4查看团队中成员的佣金明细
+2.4.1基本信息
+请求路径: /api/leader/team/member-commissions
+请求方式: GET
+鉴权方式: JWT Token
+2.4.2请求参数
+参数名	类型	是否必须	备注
+camp_id	number	必须	默认为1001
+user_id	number	必须	团队中推广大使的id
+2.4.3响应数据
+参数格式：application/json参数说明：
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -user_id	number	必须	推广大使ID
+    -username	string	必须	推广大使名称
+    -total_commission	number	必须	该营期内总佣金金额
+    -conversion——count	number	必须	该营期内成功转化数
+    -camp_id	string	必须	始终为“直接转化佣金”
+    -camp_name	number	必须	该佣金明细的营期
+    -start_date	string	必须	营期开始时间
+    -end_date	string	必须	营期结束时间
+-details	array	必须	明细的列表
+    --commission_id	number	必须	此条佣金信息的ID
+    --commission_type	string	必须	佣金的类型('ambassador_conversion', 'leader_team_conversion')
+    --order_id	number	必须	此处为关联外部系统订单ID（订单数据由外部接口提供）
+    --customer_id	number	必须	此处为被成功推广转化的客户的ID
+    --tier	string	非必须	分级层级，对应于commissions表中的tier，若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处必填
+   --commission_amount	Number	必须	此条佣金明细所对应的明确金额
+   --created_time	String	必须	此条佣金明细的创建时间
+
+
+响应数据样例：
+{
+  "code": 1,
+  "msg": "数据获取成功",
+  "data": {
+    "user_id": 102,
+    "username": "张小明",
+    "total_commission": 8700.00,
+    "conversion_count": 12,
+    "camp_id": 214,
+    "camp_name": "2025Q1精英营",
+    "start_date": "2025-01-01T00:00:00",
+    "end_date": "2025-03-31T23:59:59",
+    "details": [
+      {
+        "commission_id": 1001,
+        "commission_type": "ambassador_conversion",
+        "order_id": 20001,
+        "customer_id": 3280,
+        "tier": "junior",
+        "commission_amount": 500.00,
+        "created_time": "2025-01-05T14:30:00"
+      },
+      {
+        "commission_id": 1002,
+        "commission_type": "ambassador_conversion",
+        "order_id": 20002,
+        "customer_id": 3281,
+        "tier": "intermediate",
+        "commission_amount": 800.00,
+        "created_time": "2025-01-10T09:15:00"
+      },
+      {
+        "commission_id": 1003,
+        "commission_type": "ambassador_conversion",
+        "order_id": 20003,
+        "customer_id": 3282,
+        "tier": "senior",
+        "commission_amount": 1200.00,
+        "created_time": "2025-01-15T16:45:00"
+      }
+    ]
+  }
+}
+
+
+
+
+2.5获取客户信息表单
+2.5.1基本信息
+请求路径: /api/leader/customer
+请求方式: GET
+鉴权方式: JWT Token
+2.5.2请求参数
+参数名	类型	是否必须	备注
+page	number	否	当前页码，默认1
+size	number	否	每页记录数，最大值50，默认值10
+keyword	string	否	搜索关键词，可搜索姓名电话邮箱
+sort	string	created_at	排序字段，可选值：id, name, created_at
+order	string	desc	排序方式，可选值：asc(升序), desc(降序)
+team_only	boolean	否	是否只显示团队相关客户
+2.5.3响应数据
+参数格式：application/json参数说明：
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -total	number	必须	总记录数
+    -pages	number	必须	总页数
+    -current	number	必须	当前页码
+    -customers	array	必须	潜在客户列表，数据库customer中status=’potential’
+    --id	int	必须	客户唯一ID（关联 customers.id）
+    --name	string	必须	客户姓名
+    --phone	string	非必须	客户手机号
+    --email	string	非必须	客户邮箱
+    --created_time	string	必须	客户信息创建时间
+
+
+响应数据样例：
+{
+  "code": 1,
+  "msg": "数据获取成功",
+  "data": {
+    "customers": [
+      {
+        "id": 1001,
+        "name": "张伟",
+        "phone": "13812345678",
+        "email": "zhangwei@example.com",
+        "created_time": "2023-08-20T14:30:00Z"
+      },
+      {
+        "id": 1002,
+        "name": "李娜",
+        "phone": null,  // 手机号为空（数据库允许空值）
+        "email": "lina@example.com",
+        "created_time": "2023-08-21T09:15:00Z"
+      },
+      {
+        "id": 1003,
+        "name": "王强",
+        "phone": "13987654321",
+        "email": null,  // 邮箱为空（数据库允许空值）
+        "created_time": "2023-08-22T16:45:00Z"
+      },
+      {
+        "id": 1004,
+        "name": "陈静",
+        "phone": null,
+        "email": null,  // 手机号和邮箱均为空
+        "created_time": "2023-08-23T11:20:00Z"
+      }
+    ]
+  }
+}
+
+
+3.	系统管理员的接口设计
+模块一：推广数据总察
+3.1营销数据概览
+3.1.1基本信息
+请求路径: /api/admin/dashboard/overview
+请求方式: GET
+鉴权方式: JWT Token
+3.1.2请求参数
+参数名	类型	是否必须	备注
+camp_id	Number	必须	营期id，默认为1001
+3.1.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -totalConversions	Integer	必须	当前活跃营期总转化数
+    -totalTeams	Integer	必须	当前活跃营期总推广大使团队数
+    -totalAmbassadors	Integer	必须	当前活跃营期总推广大使数
+    -totalCommssion	BigDecimal	必须	当前活跃营期总佣金金额
+    -campInfo	Object	必须	营期信息
+    --campId	Integer	必须	营期ID
+    --campName	String	必须	营期名称
+    --startDate	LocalDateTime	必须	营期开始时间
+    --endDate	LocalDateTime	必须	营期结束时间
+    --daysLeft	Integer	必须	当前营期的开始日期据今日的日期
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "campInfo": {
+      "campId": 1001,
+      "campName": "2023Q1精英营",
+      "startDate": "2023-01-01T00:00:00",
+      "endDate": "2023-03-31T23:59:59",
+      "daysLeft": 31
+    },
+    "totalConversions": 352,
+    "totalTeams": 12,
+    "totalAmbassadors": 85,
+    "totalCommission": 42850.00
+  }
+}
+
+
+3.2推广之星接口
+3.2.1基本信息
+请求路径: /api/admin/dashboard/marketing_stars
+请求方式: GET
+鉴权方式: JWT Token
+3.2.2请求参数
+参数名	类型	是否必须	备注
+camp_id	number	必须	营期id，默认为1001
+3.2.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -topTeams	Array	必须	最佳团队信息
+    --teamId	Integer	必须	团队ID
+    --teamName	String	必须	团队名称
+    --leaderId	Integer	必须	团队领导人ID
+    --leaderName	String	必须	团队领带人名称
+    --totalConversions	Integer	必须	团队在这个指定营期的总转化数
+    --totalCommission	BigDecimal	必须	该团队在这个指定营期的总佣金
+    --memberCount	Integer	必须	团队成员数
+    --rank	Integer	必须	排名
+    -topAmbassadors	Array	必须	最佳推广大使信息
+    --userId	Integer	必须	用户ID
+    --userName	String	必须	用户名称
+    --teamId	Integer	必须	所属团队ID
+    --teamName	String	必须	所属团队名称
+    --conversions	Integer	必须	该用户在这个指定营期的总转化数
+    --totalCommission	BigDecimal	必须	该用户在指定营期的总佣金金额
+    --rank	Integer	必须	排名
+    -campPeriod	Object	必须	营期信息
+    --campId	Integer	必须	营期ID
+    --campName	String	必须	营期名称
+    --startDate	LocalDateTime	必须	营期开始时间
+    --endDate	LocalDateTime	必须	营期结束时间
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "topTeams": [
+      {
+        "teamId": 101,
+        "teamName": "精英推广团队",
+        "leaderId": 1001,
+        "leaderName": "张三",
+        "totalConversions": 28,
+        "totalCommission": 2800.00,
+        "memberCount": 5,
+        "rank": 1
+      },
+      {
+        "teamId": 102,
+        "teamName": "闪电推广团队",
+        "leaderId": 1005,
+        "leaderName": "王五",
+        "totalConversions": 24,
+        "totalCommission": 2400.00,
+        "memberCount": 4,
+        "rank": 2
+      }
+    ],
+    "topAmbassadors": [
+      {
+        "userId": 1002,
+        "username": "李四",
+        "teamId": 101,
+        "teamName": "精英推广团队",
+        "conversions": 10,
+        "totalCommission": 1000.00,
+        "rank": 1
+      },
+      {
+        "userId": 1006,
+        "username": "赵六",
+        "teamId": 102,
+        "teamName": "闪电推广团队",
+        "conversions": 8,
+        "totalCommission": 850.00,
+        "rank": 2
+      }
+    ],
+    "campPeriod": {
+      "campId": 1001,
+      "campName": "2023Q1精英营",
+      "startDate": "2023-01-01T00:00:00",
+      "endDate": "2023-03-31T23:59:59"
+    }
+  }
+}
+
+
+3.2.4错误码
+
+参数名	描述
+0	请求失败
+-1	参数错误
+-2	指定的营期不存在
+-3	无权限访问
+
+
+3.3转化趋势分析
+3.3.1基本信息
+请求路径: /api/admin/dashboard/conversion_camp_trends
+请求方式: GET
+鉴权方式: JWT Token
+3.3.2请求参数
+参数名	类型	是否必须	备注
+limit	Integer	否	默认值为5，返回的营期数量，最大10
+current_id	Number	必须	营期id，默认为1001
+3.3.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -trendData	Array	必须	营期转换趋势数据列表
+    --campId	Integer	必须	营期ID
+    --campName	String	必须	营期名称
+    --period	String	必须	营期时间范围
+    --totalConversions	Integer	必须	团队在这个指定营期的总转化数
+    --totalCommission	BigDecimal	必须	该团队在这个指定营期的总佣金
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "currentCampId": 1005,
+    "trendData": [
+      {
+        "campId": 1001,
+        "campName": "2022Q1精英营",
+        "period": "2022-01-01至2022-03-31",
+        "totalConversions": 285,
+        "totalCommission": 32500.00,
+      },
+      {
+        "campId": 1002,
+        "campName": "2022Q2精英营",
+        "period": "2022-04-01至2022-06-30",
+        "totalConversions": 310,
+        "totalCommission": 36200.00,
+      },
+      {
+        "campId": 1003,
+        "campName": "2022Q3精英营",
+        "period": "2022-07-01至2022-09-30",
+        "totalConversions": 342,
+        "totalCommission": 40100.00,
+      },
+      {
+        "campId": 1004,
+        "campName": "2022Q4精英营",
+        "period": "2022-10-01至2022-12-31",
+        "totalConversions": 368,
+        "totalCommission": 43500.00,
+      },
+      {
+        "campId": 1005,
+        "campName": "2023Q1精英营",
+        "period": "2023-01-01至2023-03-31",
+        "totalConversions": 385,
+        "totalCommission": 45800.00,
+      }
+    ]
+  }
+}
+
+
+
+
+3.4佣金分配分析
+3.4.1基本信息
+请求路径: /api/admin/dashboard/commission_Distribution
+请求方式: GET
+鉴权方式: JWT Token
+3.4.2请求参数
+参数名	类型	是否必须	备注
+dimension	String	否	默认值为”all”， 数据维度："type"/"tier"/"team"/"all"
+camp_id	Number	必须	当前营期id，默认为1001
+3.4.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -campInfo	Object	必须	营期信息
+    --campId	Integer	必须	营期ID
+    --campName	String	必须	营期名称
+    --startDate	LocalDateTime	必须	营期开始时间
+    --endDate	LocalDateTime	必须	营期结束时间
+    -totalCommission	Bigdecimal	必须	该营期的总佣金金额
+      -byType	Array	必须	按佣金类型分类的数据
+      --type	String	必须	佣金类型
+      --typeName	String	必须	佣金类型中文名称
+      --amount	BigDecimal	必须	该类型总佣金金额
+      --count	Integer	必须	该类型佣金记录数
+      --percentage	Double	必须	占总佣金比例（百分比）
+      -byTier	Array	必须	按佣金的层级分类的数据
+      --tier	String	必须	佣金层级
+      --tierName	String	必须	层级中文名称
+      --amount	BigDecimal	必须	该类型总佣金金额
+      --count	Integer	必须	该类型佣金记录数
+      --percentage	Double	必须	占总佣金比例（百分比）
+      -byTeam	Array	必须	按团队分类的数据
+      --teamId	Integer	必须	团队ID
+      --teamName	String	必须	团队名称
+      --leaderId	Integer	必须	该团队推广大使长ID
+      --leaderName	String	必须	团队领导人名称
+      --teamAmount	BigDecimal	必须	团队总佣金金额
+      --leaderAmount	BigDecimal	必须	该团队推广大使长佣金金额
+      --memberAmount	BigDecimal	必须	团队成员获得的佣金
+      --percentage	Double	必须	占总佣金比例（百分比）
+      -topRecipients	Array	必须	佣金收入最高的用户列表
+      --userId	Integer	必须	用户ID
+      --userName	String	必须	用户名称
+      --role	String	必须	用户角色
+      --teamId	Integer	非必须	所属团队ID
+      --teamName	String	非必须	所属团队名称
+      --totalCommission	BigDecimal	必须	该用户获得的总佣金
+      --percentage	Double	必须	占总佣金比例（百分比）
+      --rank	Integer	必须	排名
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "campInfo": {
+      "campId": 1001,
+      "campName": "2023Q1精英营",
+      "startDate": "2023-01-01T00:00:00",
+      "endDate": "2023-03-31T23:59:59"
+    },
+    "totalCommission": 82500.00,
+    "byType": [
+      {
+        "type": "ambassador_conversion",
+        "typeName": "直接推广佣金",
+        "amount": 45000.00,
+        "count": 350,
+        "percentage": 54.5
+      },
+      {
+        "type": "leader_team_conversion",
+        "typeName": "团队推广佣金",
+        "amount": 22500.00,
+        "count": 180,
+        "percentage": 27.3
+      },
+      {
+        "type": "promotion_bonus_fixed",
+        "typeName": "晋升固定奖励",
+        "amount": 10000.00,
+        "count": 5,
+        "percentage": 12.1
+      },
+      {
+        "type": "promotion_bonus_percentage",
+        "typeName": "晋升比例奖励",
+        "amount": 5000.00,
+        "count": 5,
+        "percentage": 6.1
+      }
+    ],
+	"byTier": [
+      {
+        "tier": "junior",
+        "tierName": "初级",
+        "amount": 30000.00,
+        "count": 300,
+        "percentage": 36.4
+      },
+      {
+        "tier": "intermediate",
+        "tierName": "中级",
+        "amount": 22500.00,
+        "count": 150,
+        "percentage": 27.3
+      },
+      {
+        "tier": "senior",
+        "tierName": "高级",
+        "amount": 15000.00,
+        "count": 80,
+        "percentage": 18.2
+      },
+      {
+        "tier": null,
+        "tierName": "晋升奖励",
+        "amount": 15000.00,
+        "count": 10,
+        "percentage": 18.2
+      }
+    ],
+    "byTeam": [
+      {
+        "teamId": 101,
+        "teamName": "精英推广团队",
+        "leaderId": 1001,
+        "leaderName": "张三",
+        "teamAmount": 35000.00,
+        "leaderAmount": 12000.00,
+        "memberAmount": 23000.00,
+        "percentage": 42.4
+      },
+      {
+        "teamId": 102,
+        "teamName": "闪电推广团队",
+        "leaderId": 1005,
+        "leaderName": "王五",
+        "teamAmount": 28000.00,
+        "leaderAmount": 9500.00,
+        "memberAmount": 18500.00,
+        "percentage": 33.9
+      },
+      {
+        "teamId": 103,
+        "teamName": "火箭推广团队",
+        "leaderId": 1010,
+        "leaderName": "赵六",
+        "teamAmount": 19500.00,
+        "leaderAmount": 7000.00,
+        "memberAmount": 12500.00,
+        "percentage": 23.6
+      }
+],
+"topRecipients": [
+      {
+        "userId": 1001,
+        "username": "张三",
+        "role": "leader",
+        "teamId": 101,
+        "teamName": "精英推广团队",
+        "totalCommission": 12000.00,
+        "percentage": 14.5,
+        "rank": 1
+      },
+      {
+        "userId": 1005,
+        "username": "王五",
+        "role": "leader",
+        "teamId": 102,
+        "teamName": "闪电推广团队",
+        "totalCommission": 9500.00,
+        "percentage": 11.5,
+        "rank": 2
+      },
+      {
+        "userId": 1010,
+        "username": "赵六",
+        "role": "leader",
+        "teamId": 103,
+        "teamName": "火箭推广团队",
+        "totalCommission": 7000.00,
+        "percentage": 8.5,
+        "rank": 3
+      },
+      {
+        "userId": 1002,
+        "username": "李四",
+        "role": "ambassador",
+        "teamId": 101,
+        "teamName": "精英推广团队",
+        "totalCommission": 6500.00,
+        "percentage": 7.9,
+        "rank": 4
+      },
+      {
+        "userId": 1006,
+        "username": "钱七",
+        "role": "ambassador",
+        "teamId": 102,
+        "teamName": "闪电推广团队",
+        "totalCommission": 5800.00,
+        "percentage": 7.0,
+        "rank": 5
+      }
+    ]
+  }
+}
+
+
+
+模块二：推广大使管理接口
+子模块：独立推广大使管理
+3.5获取独立推广大使列表接口
+3.5.1基本信息
+请求路径: /api/admin/ambassadors/independent/list
+请求方式: GET
+鉴权方式: JWT Token
+3.5.2请求参数
+参数名	类型	是否必须	备注
+page	Integer	否	默认值为1，页码，默认从1开始
+size	Integer	否	默认值为10，每页记录数，最大值50
+keyword	String	否	默认值为null，搜索关键词（用户名/邮箱/电话）
+sort_field	String	否	默认值“id“，排序字段：”id“/”username“/”created_at”
+sort_order	String	否	默认值为des，排序方式：“asc”/“desc”
+3.5.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+    -total	Integer	必须	总记录数
+    -pages	Integer	必须	总页数
+    -current	Integer	必须	当前页码
+    -records	Array	必须	推广大使记录列表
+    --Id	Integer	必须	用户ID
+    --username	String	必须	用户名称
+    --email	String	必须	电子邮箱
+    --phone	Integer	必须	电话号码
+    --created_at	LocalDateTime	必须	创建时间
+    --updated_at	LocalDateTime	必须	更新时间
+    --conversions	Integer	必须	总转化数
+    --commission	BigDecimal	必须	总佣金
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "total": 25,
+    "pages": 3,
+    "current": 1,
+    "records": [
+      {
+        "id": 1005,
+        "username": "赵琳",
+        "email": "zhaolin@example.com",
+        "phone": "13800138005",
+        "created_at": "2023-01-15T10:30:00",
+        "updated_at": "2023-04-21T15:45:20",
+        "conversions": 15,
+        "commission": 1800.50
+      },
+      {
+        "id": 1008,
+        "username": "李明",
+        "email": "liming@example.com",
+        "phone": "13800138008",
+        "created_at": "2023-02-05T14:20:00",
+        "updated_at": "2023-04-18T09:15:10",
+        "conversions": 12,
+        "commission": 1450.00
+      },
+      // ... 更多记录
+    ]
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.6添加独立推广大使接口
+3.6.1基本信息
+请求路径: /api/admin/ambassadors/independent/add
+请求方式: POST
+鉴权方式: JWT Token
+3.6.2请求参数
+参数名	类型	是否必须	备注
+username	String	是	用户名，不可重复
+password	String	必须	密码，至少8位
+email	String	否	电子邮箱
+phone	String	否	    电话号码
+3.6.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+-id	String	是	新建的独立推广大使的id
+-username	String	必须	新建的独立推广大使的用户名
+-email	String	否	电子邮箱
+-phone	String	否	    电话号码
+    -created_at	LocalDateTime	必须	创建时间
+响应数据样例：
+{
+  "code": 1,
+  "message": "推广大使创建成功",
+  "data": {
+    "id": 1015,
+    "username": "wangwei",
+    "email": "wangwei@example.com",
+    "phone": "13800138015",
+    "created_at": "2023-05-10T14:30:22"
+  }
+}
+
+
+3.7查看推广大使详情接口
+3.7.1基本信息
+请求路径: /api/admin/ambassadors/independent/details/{id}
+请求方式: GET
+鉴权方式: JWT Token
+3.7.2请求参数
+参数名	类型	是否必须	备注
+id	Integer	是	推广大使ID
+3.7.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+-id	Integer	是	用户id
+-username	String	必须	用户名
+-email	String	否	电子邮箱
+-phone	String	否	    电话号码
+    -created_at	LocalDateTime	必须	创建时间
+    -updated_at	LocalDateTime	必须	更新时间
+    -conversion_stats	Object	必须	转化统计信息
+    --total_conversions	Integer	必须	总转化数
+    --current_camp_conversions	Integer	必须	当前营期转化数（默认为1001）
+    --last_conversion_time	LocalDateTime	否	最近转化时间
+    -commission_stats	Object	必须	佣金统计信息
+    --total_commission	Int	必须	总转化数
+    --current_camp_commission	BigDecimal	必须	当前营期佣金（默认为1001）
+响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "id": 1005,
+    "username": "赵琳",
+    "email": "zhaolin@example.com",
+    "phone": "13800138005",
+    "role": "ambassador",
+    "team_id": null,
+    "team_name": null,
+    "created_at": "2023-01-15T10:30:00",
+    "updated_at": "2023-04-21T15:45:20",
+    "conversion_stats": {
+      "total_conversions": 15,
+      "current_camp_conversions": 5,
+      "last_conversion_time": "2023-04-18T09:30:45"
+    },
+    "commission_stats": {
+      "total_commission": 1800.50,
+      "current_camp_commission": 650.00,
+    }
+  }
+}
+
+
+
+
+
+
+
+
+3.8更新推广大使信息接口
+3.8.1基本信息
+请求路径: /api/admin/ambassadors/independent/update/{id}
+请求方式: PUT
+鉴权方式: JWT Token
+3.8.2请求参数
+参数名	类型	是否必须	备注
+  id	Integer	必须	推广大使ID（路径参数）
+username	String	必须	用户名，不可重复
+email	String	否	电子邮箱
+phone	String	否	    电话号码
+password	String	否	密码，不更新则不传
+3.8.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据
+-id	Integer	是	用户id
+-username	String	必须	用户名
+-email	String	否	电子邮箱
+-phone	String	否	    电话号码
+    -updated_at	LocalDateTime	必须	更新时间
+响应数据样例：
+{
+  "code": 1,
+  "message": "推广大使信息更新成功",
+  "data": {
+    "id": 1005,
+    "username": "赵琳",
+    "email": "zhaolin_new@example.com",
+    "phone": "13800138005",
+    "updated_at": "2023-05-10T16:20:45"
+  }
+}
+
+
+3.9删除独立推广大使推广大使信息接口
+3.9.1基本信息
+请求路径: /api/admin/ambassadors/independent/delete/{id}
+请求方式: DELETE
+鉴权方式: JWT Token
+备注: 只能删除没有任何推广记录的独立推广大使
+3.9.2请求参数
+参数名	类型	是否必须	备注
+  Id	Integer	必须	推广大使ID
+3.9.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Boolean	必须	删除结果，true成功，false失败
+响应数据样例：
+
+
+子模块：推广大使团队管理
+3.10获取推广大使团队列表接口
+3.10.1基本信息
+请求路径: /api/admin/team/list
+请求方式: GET
+鉴权方式: JWT Token
+3.10.2请求参数
+参数名	类型	是否必须	备注
+page	Integer	否	默认值为1，页码，默认从1开始
+size	Integer	否	默认值为10，每页记录数，最大值50
+keyword	String	否	默认值为null，搜索关键词（团队名称/领导人名称）
+sort_field	String	否	默认值“id“，排序字段：”id“/”team_name“/”created_at”
+sort_order	String	否	默认值为des，排序方式：“asc”/“desc”
+3.10.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据，失败时可能为空
+    -total	Integer	必须	总记录数
+    -pages	Integer	必须	总页数
+    -current	Integer	必须	当前页码
+    -records	Array	必须	推广大使记录列表
+    --Id	Integer	必须	团队ID
+    --team_name	String	必须	团队名称
+    --leader_id	Integer	必须	推广大使长（团队领导人）ID
+    --leader_name	String	必须	推广大使长（团队领导人）名称
+    --member_count	Integer	必须	团队成员数量
+    --created_at	LocalDateTime	必须	创建时间
+    --updated_at	LocalDateTime	必须	更新时间
+
+响应数据样例：
+3.11添加推广大使团队接口
+3.11.1基本信息
+请求路径: /api/admin/team/add
+请求方式: POST
+鉴权方式: JWT Token
+备注：此处既创建了新的推广大使长，又创建了该新推广大使长的所拥有团队
+3.11.2请求参数
+参数名	类型	是否必须	备注
+team_name	String	是	团队名称，不可重复
+leader_id	Integer	必须	团队领导人ID
+leader_name	String	必须	团队领导人姓名
+leader_password	String	必须	密码，至少8位
+leader_email	String	否	电子邮箱
+leader_phone	String	否	    电话号码
+3.11.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据，失败时可能为空
+    -id	Integer	必须	新创建的团队ID
+    -team_name	String	必须	团队名称
+    -leader_id	Integer	必须	推广大使长（团队领导人）ID
+    -leader_name	String	必须	推广大使长（团队领导人）名称
+    -created_at	LocalDateTime	必须	创建时间
+响应数据样例：
+
+
+3.12解散无效能推广大使团队接口
+3.12.1基本信息
+请求路径: /api/admin/team/delete/{id}
+请求方式: DELETE
+鉴权方式: JWT Token
+备注：只能直接删除团队内没有任何推广记录的推广大使团队，然后把团队内所有成员（包括推广大使长）全部解散为普通独立推广大使。
+3.12.2请求参数
+参数名	类型	是否必须	备注
+id	Integer	必须	团队ID
+3.12.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Boolean	必须	删除结果，true成功，false失败
+响应数据样例：
+
+
+
+3.13获取未审批晋升申请列表接口
+3.13.1基本信息
+请求路径: /api/admin/team/promotion-applications/pending
+请求方式: GET
+鉴权方式: JWT Token
+备注：满足条件的推广大使提交晋升申请后，系统在数据库中会存有他们的申请，此接口主要帮助系统管理员查看有哪些还未批准的晋升申请
+3.13.2请求参数
+参数名	类型	是否必须	备注
+page	Integer	否	默认值为1，页码，默认从1开始
+size	Integer	否	默认值为10，每页记录数，最大值50
+keyword	String	否	默认值为null，搜索关键词（申请者用户名/ID）
+sort_field	String	否	默认值“created_at“，排序字段:”team_name“/”created_at”
+sort_order	String	否	默认值为des，排序方式：“asc”/“desc”
+3.13.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	非必须	返回的数据，失败时可能为空
+    -total	Integer	必须	总记录数
+    -pages	Integer	必须	总页数
+    -current	Integer	必须	当前页码
+    -records	Array	必须	推广大使记录列表
+    --id	Integer	必须	申请ID
+    --user_id	Integer	必须	申请者用户ID
+    --user_name	String	必须	申请者用户名称
+    --user_email	String	非必须	申请者邮箱
+    --user_phone	String	非必须	申请者电话
+    --created_at	LocalDateTime	必须	创建时间
+    --remarks	String	非必须	申请备注
+    --expected_team_name	String	非必须	申请者期望的团队名称
+响应数据样例：
+
+
+
+
+
+
+3.14审批晋升申请接口 
+3.14.1基本信息
+请求路径: /api/admin/team/promotion-applications/{id}
+请求方式: POST
+鉴权方式: JWT Token
+备注：若批准申请，则将申请的推广大使身份升级为推广大使长（如果原来在团队中，则直接脱离团队），同时为他创建晋升申请里他所期望的团队，批准后，还要更新promotion_applications中申请的状态。如果申请的推广大使原本在推广大使团队中，还要向commission_distribution中插入相关数据，（暂时将distribution_mode固定为fixed）
+3.14.2请求参数
+参数名	类型	是否必须	备注
+Id	Integer	是	申请ID（路径参数）
+action	String	是	审批动作："approve"/"reject"
+3.14.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息，审批成功时返回：晋升申请已批准成功，审批拒绝时返回：“晋升申请已拒绝
+响应数据样例：
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.15获取团队基本信息接口 
+3.15.1基本信息
+请求路径: /api/admin/team/{teamId}
+请求方式: GET
+鉴权方式: JWT Token
+3.15.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	是	团队ID（路径参数）
+3.15.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -team_id	Integer	必须	团队ID
+    -team_name	String	必须	团队名称
+    -leader_id	Integer	必须	推广大使长的ID
+    -leader_name	String	必须	推广大使长的用户名
+    -current_camp_conversions	Integer	必须	当前营期团队转化数（默认此营期为1001）
+响应数据样例：
+3.16获取团队历史转化数据变化接口 
+3.16.1基本信息
+请求路径: /api/admin/team/{teamId}/conversion-history
+请求方式: GET
+鉴权方式: JWT Token
+3.16.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	是	团队ID（路径参数）
+limit	Integer	否	默认为6，返回的历史数据点数量
+3.16.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -team_id	Integer	必须	团队ID
+    -team_name	String	必须	团队名称
+    -history	Array	必须	历史数据数组
+    --period_id	String	必须	周期ID
+    --period_name	String	必须	周期名称
+    --conversions	Integer	必须	转化数
+    --commissions	BigDecimal	必须	佣金金额
+响应数据样例：
+
+
+3.17获取团队内数据转化排名接口 
+3.17.1基本信息
+请求路径: /api/admin/team/{teamId}/member-ranking
+请求方式: GET
+鉴权方式: JWT Token
+3.17.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	是	团队ID（路径参数）
+limit	Integer	否	默认为5，返回的排名数量
+3.17.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -team_id	Integer	必须	团队ID
+    -team_name	String	必须	团队名称
+    -rankings	Array	必须	排名数组
+    --user_id	Integer	必须	用户ID
+    --user_name	String	必须	用户名称
+    --is_leader	Boolean	必须	是否为团队领导
+    --conversions	Integer	必须	该营期转化数（暂定此活跃营期为1001营期）
+    --commissions	BigDecimal	必须	佣金金额（暂定此活跃营期为1001营期）
+    --email	String	 必须	团队成员邮箱
+    --phone	String	必须	团队成员手机号
+响应数据样例：
+
+
+3.18添加团队成员接口 
+3.18.1基本信息
+请求路径: /api/admin/team/{teamId}/members
+请求方式: POST
+鉴权方式: JWT Token
+备注：在团队中创建新的推广大使默认密码为00000000
+3.18.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	是	团队ID（路径参数）
+username	String	必须	新创建的团队推广大使用户名
+email	String	非必须	邮箱
+phone	String	非必须	电话
+password	String	非必须	默认为88888888
+3.18.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息，添加成功时返回：“已成功添加”，添加失败时返回：“添加失败“
+data	Boolean	必须	true/false
+响应数据样例：
+
+
+
+3.19删除团队成员接口 
+3.19.1基本信息
+请求路径: /api/admin/team/{teamId}/members/{userId}
+请求方式: DELETE
+鉴权方式: JWT Token
+备注：无法删除推广大使长
+3.19.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	是	团队ID（路径参数）
+userId	Integer	必须	用户ID（路径参数）
+3.19.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息 
+响应数据样例：
+
+
+
+
+
+
+3.20获取该团队推广大使长个人佣金明细数据
+3.20.1基本信息
+请求路径: /api/admin/team/{teamId}/leader_commissions
+请求方式: GET
+鉴权方式: JWT Token
+3.20.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	必须	团队ID（路径参数）
+camp_id	Integer	非必须	默认为1001，营期ID
+3.20.3响应数据
+参数格式：application/json参数说明：
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -camp_id	string	必须	营期的id
+    -camp_name	number	必须	该佣金明细的营期
+    -start_date	string	必须	营期开始时间
+    -end_date	string	必须	营期结束时间
+-details	array	必须	明细的列表
+    --commission_id	number	必须	此条佣金信息的ID
+    --commission_type	string	必须	佣金的类型('ambassador_conversion', 'leader_team_conversion', 'promotion_bonus_fixed', 'promotion_bonus_percentage')
+    --promoted_ambassador_id	number	非必须	若此条佣金明细为晋升奖励佣金（'promotion_bonus_fixed', 'promotion_bonus_percentage'），则此处会给出成功晋升的原推广大使的id
+    --order_id	number	非必须	若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处为关联外部系统订单ID（订单数据由外部接口提供）
+    --customer_id	number	非必须	若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处为被成功推广转化的客户的ID
+    --tier	string	非必须	分级层级，对应于commissions表中的tier，若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处必填
+   --commission_amount	Number	必须	此条佣金明细所对应的明确金额
+   --created_time	String	必须	此条佣金明细的创建时间
+
+
+响应数据样例：
+
+
+
+
+
+3.21查看团队中成员的佣金明细
+3.21.1基本信息
+请求路径: /api/admin/team/{teamId}/members/{userId}/commissions
+请求方式: GET
+鉴权方式: JWT Token
+3.21.2请求参数
+参数名	类型	是否必须	备注
+teamId	Integer	必须	团队ID（路径参数）
+camp_id	number	非必须	默认为1001
+user_id	number	必须	团队中推广大使的id
+3.21.3响应数据
+参数格式：application/json参数说明：
+参数名	类型	是否必须	备注
+code	number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Object	必须	返回的数据
+    -user_id	number	必须	推广大使ID
+    -username	string	必须	推广大使名称
+    -total_commission	number	必须	该营期内总佣金金额
+    -conversion——count	number	必须	该营期内成功转化数
+    -camp_id	string	必须	始终为“直接转化佣金”
+    -camp_name	number	必须	该佣金明细的营期
+    -start_date	string	必须	营期开始时间
+    -end_date	string	必须	营期结束时间
+-details	array	必须	明细的列表
+    --commission_id	number	必须	此条佣金信息的ID
+    --commission_type	string	必须	佣金的类型('ambassador_conversion', 'leader_team_conversion')
+    --order_id	number	必须	此处为关联外部系统订单ID（订单数据由外部接口提供）
+    --customer_id	number	必须	此处为被成功推广转化的客户的ID
+    --tier	string	非必须	分级层级，对应于commissions表中的tier，若此条佣金为推广转化佣金或者团队转化佣金（'ambassador_conversion', 'leader_team_conversion'），则此处必填
+   --commission_amount	Number	必须	此条佣金明细所对应的明确金额
+   --created_time	String	必须	此条佣金明细的创建时间
+响应数据样例：
+
+
+
+
+模块三：客户数据查看模块
+3.22客户列表查询接口 
+3.22.1基本信息
+请求路径: /api/admin/customers
+请求方式: GET
+鉴权方式: JWT Token
+3.22.2请求参数
+参数名	类型	是否必须	备注
+page	Integer	否	默认值为1，页码，默认从1开始
+size	Integer	否	默认值为10，每页记录数，最大值50
+keyword	String	否	默认值为null，搜索关键词（姓名/电话/邮箱）
+status	String	否	默认为null，客户状态：“potential”/”converted”/null（全部）
+sort_field	String	否	默认值“created_at“，排序字段:”id“/”created_at”/”name”/”status”
+sort_order	String	否	默认值为des，排序方式：“asc”/“desc”
+team_id	Integer	否	默认值为null，按团队筛选，null表示不筛选
+3.22.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Boolean	必须	返回的数据
+    -total	Integer	必须	总记录数
+    -pages	Integer	必须	总页数
+    -current	Integer	必须	当前页码
+    -customers	Array	必须	客户记录列表
+    --Id	Integer	必须	客户ID
+    --name	String	必须	客户姓名
+    --email	String	必须	客户邮箱
+    --phone	Integer	必须	客户手机电话
+--status	String	否	客户状态：“potential”/”converted”
+    --created_time	String	必须	创建时间
+响应数据样例：
+
+
+
+
+
+
+
+
+3.23客户详情查询接口 
+3.23.1基本信息
+请求路径: /api/admin/customers/{id}
+请求方式: GET
+鉴权方式: JWT Token
+3.23.2请求参数
+参数名	类型	是否必须	备注
+Id	Integer	必须·	客户ID
+3.23.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Boolean	必须	返回的数据
+    -id	Integer	必须	客户ID
+    -name	String	必须	客户姓名
+    -phone	String	否	客户手机号
+    -email	String	否	客户邮箱
+    -status	String	是	客户状态
+    -name	String	必须	客户姓名
+    -email	String	必须	客户邮箱
+    -phone	Integer	必须	客户手机电话
+-status	String	否	客户状态：“potential”/”converted”
+    -created_at	String	必须	客户信息创建时间
+    -updated_at	String	必须	客户信息更新时间
+    -camp_conversions	Array	否	已经被成功转化的客户，他所有的被转化记录列表（如果该用户是converted，则返回此数组数据。否则返回null）
+    --camp_id	Integer	必须	营期ID
+    --camp_description	String	必须	营期描述
+    --camp_start_date	String	必须	营期开始时间
+    --camp_end_date	String	必须	营期结束时间
+    --order_id	Integer	必须	订单ID
+    --promoter_id	Integer	必须	推广大使ID
+    --promoter_name	String	必须	推广大使姓名
+响应数据样例：
+
+
+
+
+
+
+
+
+
+
+
+3.24客户数据概览接口 
+3.24.1基本信息
+请求路径: /api/admin/customers/statistics/overview
+请求方式: GET
+鉴权方式: JWT Token
+3.24.2请求参数
+参数名	类型	是否必须	备注
+camp_id	Integer	必须·	默认值为null，客户ID，不指定则查询全部
+3.24.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	Boolean	必须	返回的数据
+    -total_customers	Integer	必须	总客户数
+    -potential_customers	Integer	必须	潜在客户数
+    -converted_customers	Integer	必须	已转化客户数
+    -new_customers_7days	Integer	必须	近7天新增客户数
+    -new_conversions_7days	Integer	必须	近7天新增转化数
+    -camp_info	Object	否	营期信息
+    --id	Integer	必须	营期ID
+    --description	String	必须	营期描述
+    --start_date	LocalDateTime	必须	营期开始时间
+    --end_date	LocalDateTime	必须	营期结束时间
+响应数据样例：
+
+
+
+
+
+
+
+
+4 公共接口设计
+4.1登录接口设计 
+4.1.1基本信息
+请求路径: /api/auth/login
+请求方式: POST
+鉴权方式: JWT Token
+4.1.2请求参数
+参数名	类型	是否必须	备注
+username	String	必须·	用户名
+password	String	必须	密码
+4.1.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	String	必须	JWT令牌（成功时返回）
+响应数据样例：
+{
+  "code": 1,
+  "msg": "success",
+  "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+
+
+
+
+
+
+4.2获取个人信息接口 
+4.2.1基本信息
+请求路径: /api/user/profile
+请求方式: GET
+鉴权方式: JWT Token
+4.2.2请求参数
+无
+4.2.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Number	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	String	必须	个人信息对象
+    -id	Integer	必须	用户ID
+    -name	String	必须	用户名
+    -phone	String	是	没有则返回null，用户手机号
+    -email	String	是	没有则返回null，用户邮箱
+    -role	String	是	
+响应数据样例：
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "id": 10001,
+    "username": "zhangsan",
+    "email": "zhangsan@example.com",
+    "phone": "13800138000",
+    "role": "ambassador",
+  }
+}
+
+
+
+
+
+4.3更新个人信息接口 
+4.3.1基本信息	
+请求路径: /api/user/profile
+请求方式: PUT
+鉴权方式: JWT Token
+4.3.2请求参数
+
+参数名	类型	是否必须	备注
+    -password	Integer	非必须	用户密码
+    -phone	String	非必须	邮箱
+    -email	String	非必须	电话
+4.3.3响应数据
+参数格式：application/json参数说明：
+
+参数名	类型	是否必须	备注
+code	Integer	必须	响应码，1 代表成功，0 代表失败
+msg	String	必须	提示信息
+data	String	必须	更新后的个人信息对象
+    -id	Integer	必须	用户ID
+    -username	String	必须	用户名
+    -phone	String	是	没有则返回null，用户手机号
+    -email	String	是	没有则返回null，用户邮箱
+    -updatedAt	String	是	更新时间
+响应数据样例：
+{
+  "code": 1,
+  "msg": "个人信息更新成功",
+  "data": {
+    "id": 10001,
+    "username": "zhangsan",
+    "email": "zhangsan_new@example.com",
+    "phone": "13900139000",
+    "updatedAt": "2023-07-15 14:30:45"
+  }
+}
+
+

@@ -25,7 +25,7 @@ export function logout() {
 // 获取当前用户信息
 export function getUserInfo() {
     return request({
-        url: '/api/auth/userinfo',
+        url: '/api/user/profile',
         method: 'get'
     });
 } 
