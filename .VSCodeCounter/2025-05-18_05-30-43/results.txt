@@ -1,0 +1,100 @@
+Date : 2025-05-18 05:30:43
+Directory : /home/devbox/project
+Total : 49 files,  4627 codes, 580 comments, 468 blanks, all 5675 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          2 |      2,016 |          0 |          2 |      2,018 |
+| MS SQL             |          2 |      1,416 |        230 |        281 |      1,927 |
+| JavaScript         |         24 |        936 |        315 |        127 |      1,378 |
+| PostCSS            |         13 |        131 |          3 |         31 |        165 |
+| Java               |          2 |         62 |         29 |         16 |        107 |
+| HTML               |          2 |         53 |          0 |          8 |         61 |
+| JSON with Comments |          1 |          8 |          0 |          1 |          9 |
+| Properties         |          1 |          2 |          2 |          1 |          5 |
+| Shell Script       |          1 |          2 |          1 |          0 |          3 |
+| XML                |          1 |          1 |          0 |          1 |          2 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                             | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                |         49 |      4,627 |        580 |        468 |      5,675 |
+| . (Files)                                                                                        |          7 |      2,077 |          6 |         11 |      2,094 |
+| dist                                                                                             |         25 |        184 |          0 |         32 |        216 |
+| dist (Files)                                                                                     |          1 |         27 |          0 |          4 |         31 |
+| dist/assets                                                                                      |         24 |        157 |          0 |         28 |        185 |
+| src                                                                                              |         17 |      2,366 |        574 |        425 |      3,365 |
+| src (Files)                                                                                      |          1 |         10 |          0 |          5 |         15 |
+| src/api                                                                                          |          5 |        411 |        241 |         57 |        709 |
+| src/assets                                                                                       |          3 |        121 |          3 |         21 |        145 |
+| src/database                                                                                     |          2 |      1,416 |        230 |        281 |      1,927 |
+| src/main                                                                                         |          2 |         62 |         29 |         16 |        107 |
+| src/main/java                                                                                    |          2 |         62 |         29 |         16 |        107 |
+| src/main/java/com                                                                                |          2 |         62 |         29 |         16 |        107 |
+| src/main/java/com/marketing                                                                      |          2 |         62 |         29 |         16 |        107 |
+| src/main/java/com/marketing/ambassador                                                           |          2 |         62 |         29 |         16 |        107 |
+| src/main/java/com/marketing/ambassador/controller                                                |          1 |         54 |         12 |         12 |         78 |
+| src/main/java/com/marketing/ambassador/service                                                   |          1 |          8 |         17 |          4 |         29 |
+| src/router                                                                                       |          1 |        169 |         20 |         11 |        200 |
+| src/utils                                                                                        |          3 |        177 |         51 |         34 |        262 |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                         | language           | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /home/devbox/project/.env                                                                        | Properties         |          2 |          2 |          1 |          5 |
+| /home/devbox/project/dist/assets/AdminCustomerData-DjJzN5cj.js                                   | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AdminCustomerData-KxRG4BiV.css                                  | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AdminDashboard-D2bI1O2M.js                                      | JavaScript         |         24 |          0 |          0 |         24 |
+| /home/devbox/project/dist/assets/AdminDashboard-DL6hQ4So.css                                     | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AdminNavBar-B2tiYlU-.js                                         | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AdminNavBar-B5g4NSn5.css                                        | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AmbassadorDashboard-C9dcar7X.css                                | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AmbassadorDashboard-DwsHYZyi.js                                 | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AmbassadorManagement-BTEsl_T-.css                               | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/AmbassadorManagement-qShfKDVk.js                                | JavaScript         |         15 |          0 |          1 |         16 |
+| /home/devbox/project/dist/assets/CommissionData-BqdRIV7O.css                                     | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/CommissionData-Bto0IiYE.js                                      | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/LeaderDashboard-D1t-qZCO.js                                     | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/LeaderDashboard-sw523VHj.css                                    | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/Login-CRyDb5mh.css                                              | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/Login-D43HRvDS.js                                               | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/NotFound-lwydGgYS.css                                           | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/NotFound-t78gY0iZ.js                                            | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/UserProfile-BwizBRZX.css                                        | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/UserProfile-CLy-bxt5.js                                         | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/auth-C0OuI9IS.js                                                | JavaScript         |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/index-B0ywRIfq.css                                              | PostCSS            |          1 |          0 |          1 |          2 |
+| /home/devbox/project/dist/assets/index-Bt0verpb.js                                               | JavaScript         |         64 |          0 |          1 |         65 |
+| /home/devbox/project/dist/assets/installCanvasRenderer-9PKGsH8D.js                               | JavaScript         |         34 |          0 |          6 |         40 |
+| /home/devbox/project/dist/index.html                                                             | HTML               |         27 |          0 |          4 |         31 |
+| /home/devbox/project/entrypoint.sh                                                               | Shell Script       |          2 |          1 |          0 |          3 |
+| /home/devbox/project/index.html                                                                  | HTML               |         26 |          0 |          4 |         30 |
+| /home/devbox/project/jsconfig.json                                                               | JSON with Comments |          8 |          0 |          1 |          9 |
+| /home/devbox/project/package-lock.json                                                           | JSON               |      1,989 |          0 |          1 |      1,990 |
+| /home/devbox/project/package.json                                                                | JSON               |         27 |          0 |          1 |         28 |
+| /home/devbox/project/src/api/admin.js                                                            | JavaScript         |        213 |        158 |         33 |        404 |
+| /home/devbox/project/src/api/ambassador.js                                                       | JavaScript         |         84 |         18 |         10 |        112 |
+| /home/devbox/project/src/api/auth.js                                                             | JavaScript         |         24 |          4 |          3 |         31 |
+| /home/devbox/project/src/api/leader.js                                                           | JavaScript         |         76 |         52 |          9 |        137 |
+| /home/devbox/project/src/api/user.js                                                             | JavaScript         |         14 |          9 |          2 |         25 |
+| /home/devbox/project/src/assets/base.css                                                         | PostCSS            |         71 |          2 |         13 |         86 |
+| /home/devbox/project/src/assets/logo.svg                                                         | XML                |          1 |          0 |          1 |          2 |
+| /home/devbox/project/src/assets/main.css                                                         | PostCSS            |         49 |          1 |          7 |         57 |
+| /home/devbox/project/src/database/table.sql                                                      | MS SQL             |        361 |         37 |         84 |        482 |
+| /home/devbox/project/src/database/testdata.sql                                                   | MS SQL             |      1,055 |        193 |        197 |      1,445 |
+| /home/devbox/project/src/main.js                                                                 | JavaScript         |         10 |          0 |          5 |         15 |
+| /home/devbox/project/src/main/java/com/marketing/ambassador/controller/CommissionController.java | Java               |         54 |         12 |         12 |         78 |
+| /home/devbox/project/src/main/java/com/marketing/ambassador/service/CommissionService.java       | Java               |          8 |         17 |          4 |         29 |
+| /home/devbox/project/src/router/index.js                                                         | JavaScript         |        169 |         20 |         11 |        200 |
+| /home/devbox/project/src/utils/format.js                                                         | JavaScript         |         41 |         31 |         15 |         87 |
+| /home/devbox/project/src/utils/index.js                                                          | JavaScript         |          9 |          0 |          2 |         11 |
+| /home/devbox/project/src/utils/request.js                                                        | JavaScript         |        127 |         20 |         17 |        164 |
+| /home/devbox/project/vite.config.js                                                              | JavaScript         |         23 |          3 |          3 |         29 |
+| Total                                                                                            |                    |      4,627 |        580 |        468 |      5,675 |
++--------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

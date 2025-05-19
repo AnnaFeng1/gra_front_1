@@ -1401,6 +1401,18 @@ data	Object	必须	返回的数据
     -leader_name	String	必须	推广大使长的用户名
     -current_camp_conversions	Integer	必须	当前营期团队转化数（默认此营期为1001）
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "team_id": 1001,
+    "team_name": "冯安团队",
+    "leader_id": 15,
+    "leader_name": 冯安,
+    "current_camp_conversions": 45
+  }
+}
+
 3.16获取团队历史转化数据变化接口 
 3.16.1基本信息
 请求路径: /api/admin/team/{teamId}/conversion-history
@@ -1425,6 +1437,53 @@ data	Object	必须	返回的数据
     --conversions	Integer	必须	转化数
     --commissions	BigDecimal	必须	佣金金额
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "team_id": 1001,
+    "team_name": "冯安团队",
+    "period_type": "camp",
+    "history": [
+      {
+        "period_id": "2023-Q2",
+        "period_name": "2023年第二季度营销活动",
+        "conversions": 45,
+        "commission": 9000.00
+      },
+      {
+        "period_id": "2023-Q1",
+        "period_name": "2023年第一季度营销活动",
+        "conversions": 38,
+        "commission": 7600.00
+      },
+      {
+        "period_id": "2022-Q4",
+        "period_name": "2022年第四季度营销活动",
+        "conversions": 30,
+        "commission": 6000.00
+      },
+      {
+        "period_id": "2022-Q3",
+        "period_name": "2022年第三季度营销活动",
+        "conversions": 25,
+        "commission": 5000.00
+      },
+      {
+        "period_id": "2022-Q2",
+        "period_name": "2022年第二季度营销活动",
+        "conversions": 22,
+        "commission": 4400.00
+      },
+      {
+        "period_id": "2022-Q1",
+        "period_name": "2022年第一季度营销活动",
+        "conversions": 20,
+        "commission": 4000.00
+      }
+    ]
+  }
+}
 
 
 3.17获取团队内数据转化排名接口 
@@ -1454,6 +1513,58 @@ data	Object	必须	返回的数据
     --email	String	 必须	团队成员邮箱
     --phone	String	必须	团队成员手机号
 响应数据样例：
+{
+    "code": 1,
+    "msg": "success",
+    "data": {
+        "team_id": 101,
+        "team_name": "精英推广团队",
+        "period_type": "current",
+        "period_name": "2025年第2季度营销活动",
+        "rankings": [
+            {
+                "rank": 1,
+                "user_id": 1002,
+                "username": "ambassador11",
+                "is_leader": false,
+                "conversions": 6,
+                "commission": 4300.00,
+                "email": "amb1@example.com",
+                "phone": "13800138002"
+            },
+            {
+                "rank": 2,
+                "user_id": 1001,
+                "username": "teamleader",
+                "is_leader": true,
+                "conversions": 2,
+                "commission": 800.00,
+                "email": "leader@example.com",
+                "phone": "13800138001"
+            },
+            {
+                "rank": 3,
+                "user_id": 1003,
+                "username": "ambassador22",
+                "is_leader": false,
+                "conversions": 0,
+                "commission": 0.00,
+                "email": "amb2@example.com",
+                "phone": "13800138003"
+            },
+            {
+                "rank": 4,
+                "user_id": 1004,
+                "username": "ambassador33",
+                "is_leader": false,
+                "conversions": 0,
+                "commission": 0.00,
+                "email": "amb3@example.com",
+                "phone": "13800138004"
+            }
+        ]
+    }
+}
 
 
 3.18添加团队成员接口 
@@ -1477,6 +1588,11 @@ code	Number	必须	响应码，1 代表成功，0 代表失败
 msg	String	必须	提示信息，添加成功时返回：“已成功添加”，添加失败时返回：“添加失败“
 data	Boolean	必须	true/false
 响应数据样例：
+{
+  "code": 1,
+  "message": "成功添加团队成员",
+  "data": true
+}
 
 
 
@@ -1497,6 +1613,11 @@ userId	Integer	必须	用户ID（路径参数）
 code	Number	必须	响应码，1 代表成功，0 代表失败
 msg	String	必须	提示信息 
 响应数据样例：
+{
+  "code": 1,
+  "message": "成功删除团队成员",
+  "data": true
+
 
 
 
@@ -1534,6 +1655,40 @@ data	Object	必须	返回的数据
 
 
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "campId": 1001,
+    "campName": "2023Q2精英营",
+    "startDate": "2023-04-01T00:00:00",
+    "endDate": "2023-06-30T23:59:59",
+    "details": [
+      {
+        "commissionId": 10245,
+        "commissionType": "leader_team_bonus",
+        "promotedAmbassadorId": 3012,
+        "commissionAmount": 500.00,
+        "createdTime": "2023-05-15T14:30:20"
+      },
+      {
+        "commissionId": 10236,
+        "commissionType": "leader_conversion",
+        "orderId": 89275,
+        "customerId": 5672,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-12T10:15:45"
+      },
+      {
+        "commissionId": 10189,
+        "commissionType": "leader_team_performance",
+        "commissionAmount": 800.00,
+        "createdTime": "2023-05-01T08:20:15"
+      }
+    ]
+  }
+}
 
 
 
@@ -1572,6 +1727,76 @@ data	Object	必须	返回的数据
    --commission_amount	Number	必须	此条佣金明细所对应的明确金额
    --created_time	String	必须	此条佣金明细的创建时间
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "userId": 2015,
+    "username": "赵琳",
+    "totalCommission": 1200.00,
+    "conversionCount": 6,
+    "campId": "直接转化佣金",
+    "campName": "2023Q2精英营",
+    "startDate": "2023-04-01T00:00:00",
+    "endDate": "2023-06-30T23:59:59",
+    "details": [
+      {
+        "commissionId": 9872,
+        "commissionType": "ambassador_conversion",
+        "orderId": 89125,
+        "customerId": 5622,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-25T16:45:30"
+      },
+      {
+        "commissionId": 9845,
+        "commissionType": "ambassador_conversion",
+        "orderId": 88962,
+        "customerId": 5598,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-22T09:30:15"
+      },
+      {
+        "commissionId": 9802,
+        "commissionType": "ambassador_conversion",
+        "orderId": 88751,
+        "customerId": 5576,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-18T14:20:45"
+      },
+      {
+        "commissionId": 9786,
+        "commissionType": "ambassador_conversion",
+        "orderId": 88724,
+        "customerId": 5563,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-17T11:10:30"
+      },
+      {
+        "commissionId": 9742,
+        "commissionType": "ambassador_conversion",
+        "orderId": 88625,
+        "customerId": 5534,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-15T10:45:20"
+      },
+      {
+        "commissionId": 9705,
+        "commissionType": "ambassador_conversion",
+        "orderId": 88512,
+        "customerId": 5498,
+        "tier": "tier_1",
+        "commissionAmount": 200.00,
+        "createdTime": "2023-05-12T15:35:10"
+      }
+    ]
+  }
+}
 
 
 
@@ -1609,6 +1834,41 @@ data	Boolean	必须	返回的数据
 --status	String	否	客户状态：“potential”/”converted”
     --created_time	String	必须	创建时间
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "total": 35,
+    "pages": 4,
+    "current": 1,
+    "customers": [
+      {
+        "id": 101,
+        "name": "张三",
+        "phone": "13300000001",
+        "email": "zhangsan@example.com",
+        "status": "converted",
+        "created_time": "2023-07-20 10:30:00",
+      },
+      {
+        "id": 102,
+        "name": "李四",
+        "phone": "13300000002", 
+        "email": "lisi@example.com",
+        "status": "converted",
+        "created_time": "2023-07-21 11:15:00",
+      },
+      {
+        "id": 115,
+        "name": "张伟",
+        "phone": "13812345678",
+        "email": "zhangwei@example.com",
+        "status": "potential",
+        "created_time": "2023-08-20 14:30:00",
+      }
+    ]
+  }
+}
 
 
 
@@ -1652,6 +1912,41 @@ data	Boolean	必须	返回的数据
     --promoter_id	Integer	必须	推广大使ID
     --promoter_name	String	必须	推广大使姓名
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "id": 101,
+    "name": "张三",
+    "phone": "13300000001",
+    "email": "zhangsan@example.com",
+    "status": "converted",
+    "created_at": "2023-07-20 10:30:00",
+    "updated_at": "2023-09-15 16:25:10",
+    "camp_conversions": [
+      {
+        "camp_id": 101,
+        "camp_description": "2023Q3精英营",
+        "camp_start_date": "2023-07-01 00:00:00",
+        "camp_end_date": "2023-09-30 23:59:59",
+        "conversion_time": "2023-07-25 15:45:30",
+        "order_id": 5001,
+        "promoter_id": 2001,
+        "promoter_name": "王明",
+      },
+      {
+        "camp_id": 102,
+        "camp_description": "2023Q4精英营",
+        "camp_start_date": "2023-10-01 00:00:00",
+        "camp_end_date": "2023-12-31 23:59:59",
+        "conversion_time": "2023-10-05 09:30:15",
+        "order_id": 6023,
+        "promoter_id": 2005,
+        "promoter_name": "李芳",
+      }
+    ]
+  }
+}
 
 
 
@@ -1689,6 +1984,24 @@ data	Boolean	必须	返回的数据
     --start_date	LocalDateTime	必须	营期开始时间
     --end_date	LocalDateTime	必须	营期结束时间
 响应数据样例：
+{
+  "code": 1,
+  "message": "success",
+  "data": {
+    "total_customers": 350,
+    "potential_customers": 200,
+    "converted_customers": 150,
+    "conversion_rate": 42.86,
+    "new_customers_7days": 25,
+    "new_conversions_7days": 12,
+    "camp_info": {
+      "id": 101,
+      "description": "2023Q3精英营",
+      "start_date": "2023-07-01 00:00:00",
+      "end_date": "2023-09-30 23:59:59"
+    }
+  }
+}
 
 
 

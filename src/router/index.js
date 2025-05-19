@@ -66,6 +66,37 @@ const routes = [
         component: () => import('@/views/UserProfile.vue'),
         meta: { title: '个人中心', requiresAuth: true }
     },
+    {
+        path: '/admin-dashboard',
+        name: 'AdminHome',
+        component: () => import('@/views/admin/AdminDashboard.vue'),
+        meta: { title: '系统管理员首页', requiresAuth: true, roles: ['admin'] }
+    },
+    // 管理员路由
+    {
+        path: '/admin/dashboard',
+        name: 'AdminDashboard',
+        component: () => import('@/views/admin/AdminDashboard.vue'),
+        meta: { title: '推广数据概览', requiresAuth: true, roles: ['admin'] }
+    },
+    {
+        path: '/admin/ambassador-management',
+        name: 'AmbassadorManagement',
+        component: () => import('@/views/admin/AmbassadorManagement.vue'),
+        meta: { title: '推广大使管理', requiresAuth: true, roles: ['admin'] }
+    },
+    {
+        path: '/admin/customer-data',
+        name: 'AdminCustomerData',
+        component: () => import('@/views/admin/AdminCustomerData.vue'),
+        meta: { title: '客户数据管理', requiresAuth: true, roles: ['admin'] }
+    },
+    {
+        path: '/admin/profile',
+        name: 'AdminProfile',
+        component: () => import('@/views/UserProfile.vue'),
+        meta: { title: '管理员个人中心', requiresAuth: true, roles: ['admin'] }
+    },
     // 404页面
     {
         path: '/:pathMatch(.*)*',

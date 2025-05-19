@@ -1,0 +1,51 @@
+"filename", "language", "JSON with Comments", "HTML", "Properties", "JavaScript", "JSON", "Shell Script", "PostCSS", "Java", "MS SQL", "XML", "comment", "blank", "total"
+"/home/devbox/project/.env", "Properties", 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 1, 5
+"/home/devbox/project/dist/assets/AdminCustomerData-DjJzN5cj.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AdminCustomerData-KxRG4BiV.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AdminDashboard-D2bI1O2M.js", "JavaScript", 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 24
+"/home/devbox/project/dist/assets/AdminDashboard-DL6hQ4So.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AdminNavBar-B2tiYlU-.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AdminNavBar-B5g4NSn5.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AmbassadorDashboard-C9dcar7X.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AmbassadorDashboard-DwsHYZyi.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AmbassadorManagement-BTEsl_T-.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/AmbassadorManagement-qShfKDVk.js", "JavaScript", 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 1, 16
+"/home/devbox/project/dist/assets/CommissionData-BqdRIV7O.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/CommissionData-Bto0IiYE.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/LeaderDashboard-D1t-qZCO.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/LeaderDashboard-sw523VHj.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/Login-CRyDb5mh.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/Login-D43HRvDS.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/NotFound-lwydGgYS.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/NotFound-t78gY0iZ.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/UserProfile-BwizBRZX.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/UserProfile-CLy-bxt5.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/auth-C0OuI9IS.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/index-B0ywRIfq.css", "PostCSS", 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 2
+"/home/devbox/project/dist/assets/index-Bt0verpb.js", "JavaScript", 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 1, 65
+"/home/devbox/project/dist/assets/installCanvasRenderer-9PKGsH8D.js", "JavaScript", 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 6, 40
+"/home/devbox/project/dist/index.html", "HTML", 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 31
+"/home/devbox/project/entrypoint.sh", "Shell Script", 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 3
+"/home/devbox/project/index.html", "HTML", 0, 26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 30
+"/home/devbox/project/jsconfig.json", "JSON with Comments", 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 9
+"/home/devbox/project/package-lock.json", "JSON", 0, 0, 0, 0, 1989, 0, 0, 0, 0, 0, 0, 1, 1990
+"/home/devbox/project/package.json", "JSON", 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 1, 28
+"/home/devbox/project/src/api/admin.js", "JavaScript", 0, 0, 0, 213, 0, 0, 0, 0, 0, 0, 158, 33, 404
+"/home/devbox/project/src/api/ambassador.js", "JavaScript", 0, 0, 0, 84, 0, 0, 0, 0, 0, 0, 18, 10, 112
+"/home/devbox/project/src/api/auth.js", "JavaScript", 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 4, 3, 31
+"/home/devbox/project/src/api/leader.js", "JavaScript", 0, 0, 0, 76, 0, 0, 0, 0, 0, 0, 52, 9, 137
+"/home/devbox/project/src/api/user.js", "JavaScript", 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 9, 2, 25
+"/home/devbox/project/src/assets/base.css", "PostCSS", 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 2, 13, 86
+"/home/devbox/project/src/assets/logo.svg", "XML", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2
+"/home/devbox/project/src/assets/main.css", "PostCSS", 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 1, 7, 57
+"/home/devbox/project/src/database/table.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 361, 0, 37, 84, 482
+"/home/devbox/project/src/database/testdata.sql", "MS SQL", 0, 0, 0, 0, 0, 0, 0, 0, 1055, 0, 193, 197, 1445
+"/home/devbox/project/src/main.js", "JavaScript", 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 5, 15
+"/home/devbox/project/src/main/java/com/marketing/ambassador/controller/CommissionController.java", "Java", 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 12, 12, 78
+"/home/devbox/project/src/main/java/com/marketing/ambassador/service/CommissionService.java", "Java", 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 17, 4, 29
+"/home/devbox/project/src/router/index.js", "JavaScript", 0, 0, 0, 169, 0, 0, 0, 0, 0, 0, 20, 11, 200
+"/home/devbox/project/src/utils/format.js", "JavaScript", 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 31, 15, 87
+"/home/devbox/project/src/utils/index.js", "JavaScript", 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 2, 11
+"/home/devbox/project/src/utils/request.js", "JavaScript", 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 20, 17, 164
+"/home/devbox/project/vite.config.js", "JavaScript", 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 3, 3, 29
+"Total", "-", 8, 53, 2, 936, 2016, 2, 131, 62, 1416, 1, 580, 468, 5675

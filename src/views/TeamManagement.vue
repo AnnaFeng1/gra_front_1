@@ -14,104 +14,98 @@
           </div>
         </div>
         <div class="page-actions">
-          <el-button-group>
-            <el-button type="primary" @click="refreshData" :loading="loading">
-              <i class="el-icon-refresh"></i> 刷新数据
+          <el-tooltip content="刷新数据" placement="top">
+            <el-button 
+              type="primary" 
+              circle 
+              @click="refreshData" 
+              :loading="loading"
+              class="action-btn">
+              <el-icon><Refresh /></el-icon>
             </el-button>
-            <el-button type="success" @click="showAddMemberDialog">
-              <i class="el-icon-plus"></i> 添加成员
+          </el-tooltip>
+          <el-tooltip content="添加成员" placement="top">
+            <el-button 
+              type="success" 
+              circle 
+              @click="showAddMemberDialog"
+              class="action-btn">
+              <el-icon><Plus /></el-icon>
             </el-button>
-          </el-button-group>
+          </el-tooltip>
         </div>
       </div>
 
-      <!-- 营期选择器与数据概览卡片区域 -->
-      <div class="top-cards-row">
-        <!-- 营期选择器卡片 -->
-        <el-card class="camp-selector-card">
-          <div class="camp-selector">
-            <div class="camp-selector-content">
-              <div class="camp-selector-title">当前营期ID</div>
-              <div class="camp-period-switcher">
-                <button 
-                  class="switcher-btn prev-btn" 
+      <!-- 团队概览和营期选择区域 -->
+      <div class="metrics-container">
+        <!-- 营期选择器 -->
+        <div class="metric-item camp-selector-item">
+          <div class="camp-period-title">当前营期</div>
+          <div class="camp-selector-value">
+            <div class="selector-controls">
+              <el-tooltip content="上一个营期" placement="top">
+                <el-button 
+                  class="selector-btn" 
+                  type="primary" 
+                  circle
                   @click="changeCampPeriod(-1)" 
-                  :disabled="loading"
-                  title="减少营期ID"
-                >
-                  <span class="btn-text">-</span>
-                </button>
-                <div class="camp-period-value">{{ currentCampId }}</div>
-                <button 
-                  class="switcher-btn next-btn" 
+                  :disabled="loading">
+                  <el-icon><ArrowLeft /></el-icon>
+                </el-button>
+              </el-tooltip>
+              <div class="selector-value">{{ currentCampId }}</div>
+              <el-tooltip content="下一个营期" placement="top">
+                <el-button 
+                  class="selector-btn" 
+                  type="primary" 
+                  circle
                   @click="changeCampPeriod(1)" 
-                  :disabled="loading"
-                  title="增加营期ID"
-                >
-                  <span class="btn-text">+</span>
-                </button>
-              </div>
+                  :disabled="loading">
+                  <el-icon><ArrowRight /></el-icon>
+                </el-button>
+              </el-tooltip>
             </div>
           </div>
-        </el-card>
-
-        <!-- 团队统计卡片 -->
-        <el-card class="stats-card">
-          <template #header>
-            <div class="card-header">
-              <span><i class="el-icon-data-analysis"></i> 团队概览</span>
-            </div>
-          </template>
-          <div class="stats-wrapper">
-            <div class="stat-box">
-              <div class="stat-icon member-icon">
-                <i class="el-icon-s-custom"></i>
-              </div>
-              <div class="stat-info">
-                <div class="stat-value">{{ teamStats.memberCount }}</div>
-                <div class="stat-label">团队成员</div>
-              </div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-box">
-              <div class="stat-icon conversion-icon">
-                <i class="el-icon-s-data"></i>
-              </div>
-              <div class="stat-info">
-                <div class="stat-value">{{ teamStats.conversionCount }}</div>
-                <div class="stat-label">总转化数</div>
-              </div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-box">
-              <div class="stat-icon commission-icon">
-                <i class="el-icon-money"></i>
-              </div>
-              <div class="stat-info">
-                <div class="stat-value commission-value">¥{{ formatAmount(teamStats.totalCommission) }}</div>
-                <div class="stat-label">团队佣金</div>
-              </div>
-            </div>
+        </div>
+        
+        <div class="metric-item">
+          <div class="metric-circle members-circle">
+            <div class="metric-label">团队成员</div>
           </div>
-        </el-card>
+          <div class="metric-value members-value">{{ teamStats.memberCount }}</div>
+        </div>
+        
+        <div class="metric-item">
+          <div class="metric-circle conversions-circle">
+            <div class="metric-label">总转化数</div>
+          </div>
+          <div class="metric-value conversions-value">{{ teamStats.conversionCount }}</div>
+        </div>
+        
+        <div class="metric-item">
+          <div class="metric-circle commission-circle">
+            <div class="metric-label">团队佣金</div>
+          </div>
+          <div class="metric-value commission-value">¥{{ formatAmount(teamStats.totalCommission) }}</div>
+        </div>
       </div>
 
       <!-- 团队成员表格 -->
-      <el-card class="team-table-card">
-        <template #header>
-          <div class="card-header">
-            <span><i class="el-icon-user"></i> 团队成员</span>
-            <div class="table-actions">
-              <el-input
-                v-model="searchQuery"
-                placeholder="搜索成员..."
-                prefix-icon="el-icon-search"
-                clearable
-                class="search-input"
-              />
-            </div>
+      <div class="team-members-section">
+        <div class="section-header">
+          <h3 class="section-title">团队成员</h3>
+          <div class="search-area">
+            <el-input
+              v-model="searchQuery"
+              placeholder="搜索成员..."
+              class="search-input"
+              clearable>
+              <template #prefix>
+                <el-icon><Search /></el-icon>
+              </template>
+            </el-input>
           </div>
-        </template>
+        </div>
         
         <!-- 加载状态 -->
         <div v-if="loading" class="loading-container">
@@ -123,48 +117,38 @@
           <el-table 
             :data="filteredTableData" 
             style="width: 100%"
-            :border="false"
             stripe
             v-loading="tableLoading"
-            row-class-name="member-table-row"
-            header-row-class-name="member-table-header"
-            cell-class-name="member-table-cell"
             class="member-table"
             highlight-current-row>
-            <el-table-column prop="user_id" label="ID" width="100" align="center">
+            <el-table-column prop="user_id" label="ID" width="80" align="center" />
+            <el-table-column prop="username" label="用户名" min-width="180" align="left" />
+            <el-table-column prop="conversionCount" label="转化数量" width="120" align="center" sortable />
+            <el-table-column prop="commission" label="佣金金额" width="150" align="right" sortable>
               <template #default="scope">
-                <span class="id-cell">{{ scope.row.user_id }}</span>
+                <span class="commission-text">¥{{ formatAmount(scope.row.commission) }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="username" label="用户名" min-width="220" align="left">
+            <el-table-column label="操作" width="120" align="center">
               <template #default="scope">
-                <div class="member-name-cell">
-                  <span class="member-name">{{ scope.row.username }}</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="conversionCount" label="转化数量" min-width="180" align="center" sortable>
-              <template #default="scope">
-                <div class="conversion-cell">
-                  <span class="conversion-number">{{ scope.row.conversionCount }}</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="commission" label="佣金金额" min-width="220" align="right" sortable>
-              <template #default="scope">
-                <div class="commission-cell">
-                  <span class="commission-text">¥{{ formatAmount(scope.row.commission) }}</span>
-                  <el-tooltip content="查看佣金明细" placement="top" effect="light">
-                    <el-button 
-                      type="primary" 
-                      size="small" 
-                      class="commission-btn"
-                      @click.stop="viewMemberCommission(scope.row)"
-                      icon="el-icon-more"
-                      circle
-                    ></el-button>
-                  </el-tooltip>
-                </div>
+                <el-tooltip content="查看佣金明细" placement="top">
+                  <el-button 
+                    type="primary" 
+                    circle
+                    size="small"
+                    @click="viewMemberCommission(scope.row)">
+                    <el-icon><Money /></el-icon>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip content="移除成员" placement="top">
+                  <el-button 
+                    type="danger" 
+                    circle
+                    size="small"
+                    @click="removeTeamMember(scope.row)">
+                    <el-icon><Delete /></el-icon>
+                  </el-button>
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
@@ -185,7 +169,7 @@
           >
           </el-pagination>
         </div>
-      </el-card>
+      </div>
     </div>
     
     <!-- 添加成员对话框 -->
@@ -196,9 +180,6 @@
       :close-on-click-modal="false"
       custom-class="custom-dialog"
     >
-      <div class="dialog-icon">
-        <i class="el-icon-plus"></i>
-      </div>
       <el-form 
         ref="addMemberFormRef" 
         :model="addMemberForm" 
@@ -207,17 +188,17 @@
       >
         <el-form-item label="用户名" prop="username">
           <el-input v-model="addMemberForm.username" placeholder="请输入用户名">
-            <template #prefix><i class="el-icon-user"></i></template>
+            <template #prefix><el-icon><User /></el-icon></template>
           </el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="addMemberForm.email" placeholder="请输入邮箱">
-            <template #prefix><i class="el-icon-message"></i></template>
+            <template #prefix><el-icon><Message /></el-icon></template>
           </el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="addMemberForm.phone" placeholder="请输入手机号">
-            <template #prefix><i class="el-icon-mobile-phone"></i></template>
+            <template #prefix><el-icon><Phone /></el-icon></template>
           </el-input>
         </el-form-item>
       </el-form>
@@ -380,11 +361,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getTeamOverview, getTeamMembers, removeTeamMember, addTeamMember, getMemberCommissions } from '@/api/leader';
 import LeaderNavBar from '@/components/LeaderNavBar.vue';
+import { 
+  Refresh, 
+  Plus, 
+  ArrowLeft, 
+  ArrowRight, 
+  Search, 
+  Money, 
+  Delete, 
+  User, 
+  Message, 
+  Phone 
+} from '@element-plus/icons-vue';
 
 // 路由
 const router = useRouter();
@@ -757,23 +750,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 全局变量 */
-:root {
-  --primary-color: #409EFF;
-  --warning-color: #E6A23C;
-  --success-color: #67C23A;
-  --danger-color: #F56C6C;
-  --text-color: #2c3e50;
-  --border-color: #dcdfe6;
-  --background-color: #f5f9fc;
-}
-
 .team-management-container {
   min-height: 100vh;
-  background-color: var(--background-color);
-  display: flex;
-  flex-direction: column;
-  font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  background-color: #f5f7fa;
 }
 
 .main-content {
@@ -788,773 +767,324 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  background: linear-gradient(to right, rgba(255,255,255,0.7), rgba(255,255,255,0.9));
-  padding: 16px 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(5px);
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #303133;
+  margin: 0;
 }
 
 .page-title-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
 }
 
-.page-title {
-  font-size: 26px;
-  color: var(--text-color);
-  margin: 0;
-  font-weight: 600;
-  position: relative;
-}
-
-.page-title::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 40px;
-  height: 3px;
-  background: var(--primary-color);
-  border-radius: 3px;
-}
-
-.team-leader {
-  margin-top: 2px;
+.team-leader :deep(.el-tag) {
+  margin-left: 12px;
 }
 
 .page-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
-.top-cards-row {
+.action-btn {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* 概览部分样式 */
+.metrics-container {
   display: flex;
-  gap: 24px;
-  margin-bottom: 10px;
+  justify-content: space-around;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 40px 30px;
+  margin-bottom: 24px;
 }
 
-.camp-selector-card {
-  flex: 0 0 260px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: none;
-  transition: all 0.3s ease;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ffffff, #f7faff);
-}
-
-.camp-selector-card:hover {
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.07);
-  transform: translateY(-2px);
-}
-
-.camp-selector {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.camp-selector-content {
+/* 营期选择器样式 */
+.camp-selector-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  width: 22%;
 }
 
-.camp-selector-title {
-  font-weight: 600;
-  color: var(--text-color);
-  font-size: 16px;
-  text-align: center;
-}
-
-.camp-period-switcher {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.switcher-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #4080ff;
-  color: white;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+.camp-period-title {
   font-size: 18px;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  color: #409EFF;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 
-.btn-text {
-  font-size: 24px;
-  font-weight: bold;
+.camp-period-title::after {
+  content: '';
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background-color: #409EFF;
+  border-radius: 2px;
 }
 
-.switcher-btn:hover {
-  background: #3373e5;
-  transform: scale(1.05);
+.camp-selector-value {
+  display: flex;
+  align-items: center;
 }
 
-.switcher-btn:active {
-  transform: scale(0.98);
+.selector-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.switcher-btn:disabled {
-  background: #a0b4e0;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.camp-period-value {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  padding: 0 20px;
-  min-width: 70px;
+.selector-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #409EFF;
+  min-width: 80px;
   text-align: center;
+  line-height: 1;
+  margin: 0 12px;
 }
 
-.stats-card {
-  flex: 1;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: none;
-  transition: all 0.3s ease;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ffffff, #f7faff);
+.selector-btn {
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+  transform: scale(0.9);
+  transition: all 0.3s;
 }
 
-.stats-card:hover {
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.07);
-  transform: translateY(-2px);
+.selector-btn:hover {
+  transform: scale(1);
+  box-shadow: 0 4px 12px 0 rgba(64, 158, 255, 0.3);
 }
 
-.card-header {
+.metric-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  font-weight: 600;
-  padding: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 20px;
+  width: 22%;
 }
 
-.card-header span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 16px;
-  color: var(--text-color);
-}
-
-.stats-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-
-.stat-box {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.stat-box:hover {
-  background-color: rgba(0, 0, 0, 0.01);
-}
-
-.stat-icon {
-  width: 60px;
-  height: 60px;
+.metric-circle {
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
 }
 
-.member-icon {
-  background: linear-gradient(135deg, #26de81, #20bf6b);
+.metric-circle:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.members-circle {
+  background-color: #409EFF;
+}
+
+.conversions-circle {
+  background-color: #67C23A;
+}
+
+.commission-circle {
+  background-color: #E6A23C;
+}
+
+.metric-label {
   color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  padding: 0 5px;
 }
 
-.conversion-icon {
-  background: linear-gradient(135deg, #4b7bec, #3867d6);
-  color: white;
+.metric-value {
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
 }
 
-.commission-icon {
-  background: linear-gradient(135deg, #f7b731, #e67e22);
-  color: white;
+.members-value {
+  font-size: 32px;
+  color: #409EFF;
 }
 
-.stat-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-color);
+.conversions-value {
+  font-size: 32px;
+  color: #67C23A;
 }
 
 .commission-value {
-  color: #e67e22;
+  font-size: 28px;
+  color: #E6A23C;
 }
 
-.stat-label {
-  font-size: 14px;
-  color: #606266;
-  margin-top: 4px;
+/* 团队成员部分样式 */
+.team-members-section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 24px;
 }
 
-.stat-divider {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.01));
-  margin: 0 20px;
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.team-table-card {
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  border: none;
-  transition: all 0.3s ease;
-  background: linear-gradient(135deg, #ffffff, #f7faff);
-  overflow: hidden;
-  padding-bottom: 10px;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 90%;
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+  margin: 0;
+}
+
+.search-area {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 250px;
 }
 
 .table-container {
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .member-table {
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 16px;
-  border: none;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 16px;
-}
-
-/* 覆盖element-ui表格样式 */
-:deep(.member-table-header) {
-  background: linear-gradient(to right, #f7faff, #f0f7ff) !important;
-  color: #606266;
-  font-weight: 600;
-  font-size: 15px;
-  height: 50px;
-}
-
-:deep(.member-table-row) {
-  transition: all 0.3s;
-  height: 60px;
-}
-
-:deep(.member-table-row:hover) {
-  background-color: #f0f7ff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-:deep(.member-table-row.el-table__row--striped) {
-  background-color: #f9fbff;
-}
-
-:deep(.member-table-cell) {
-  padding: 14px 0;
-  border: none;
-}
-
-:deep(.el-table__body) td {
-  border: none;
-  border-bottom: 1px solid #f0f2f5;
-}
-
-:deep(.el-table__header-wrapper) {
-  border-bottom: 1px solid #ebeef5;
-}
-
-:deep(.el-table::before) {
-  display: none;
-}
-
-:deep(.el-table__fixed-right::before),
-:deep(.el-table__fixed::before) {
-  display: none;
-}
-
-.member-name-cell {
-  display: flex;
-  align-items: center;
-}
-
-/* 表格中的用户名样式 */
-:deep(.member-name-cell .member-name) {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.id-cell {
-  display: inline-block;
-  background-color: #f5f7fa;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #606266;
-}
-
-.conversion-cell {
-  position: relative;
-}
-
-.conversion-number {
-  font-weight: 600;
-  color: #4b7bec;
-  font-size: 18px;
-}
-
-.commission-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-right: 10px;
 }
 
 .commission-text {
-  color: #e67e22;
+  color: #E6A23C;
   font-weight: 600;
-  font-size: 18px;
-  transition: all 0.2s;
-}
-
-.status-tag {
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-.view-btn, .remove-btn {
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 13px;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-width: 72px;
-}
-
-.view-btn i, .remove-btn i {
-  font-size: 14px;
-  margin-right: 2px;
-}
-
-.view-btn span, .remove-btn span {
-  display: inline-block;
-  line-height: 1;
-}
-
-.view-btn {
-  background-color: #409EFF;
-  border-color: #409EFF;
-  box-shadow: 0 2px 5px rgba(64, 158, 255, 0.2);
-}
-
-.view-btn:hover {
-  background-color: #337ecc;
-  border-color: #337ecc;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.3);
-}
-
-.remove-btn {
-  background-color: #F56C6C;
-  border-color: #F56C6C;
-  box-shadow: 0 2px 5px rgba(245, 108, 108, 0.2);
-}
-
-.remove-btn:hover {
-  background-color: #d33d3d;
-  border-color: #d33d3d;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(245, 108, 108, 0.3);
 }
 
 .pagination-container {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  padding: 0 20px 10px;
 }
 
 .loading-container {
-  padding: 24px;
+  padding: 40px 0;
 }
 
-/* 成员详情样式 */
-.member-detail {
-  padding: 20px;
+.custom-dialog :deep(.el-dialog__body) {
+  padding-top: 10px;
 }
 
-.dialog-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #26de81, #20bf6b);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 28px;
-  margin: 0 auto 20px;
-  box-shadow: 0 4px 10px rgba(38, 222, 129, 0.3);
-}
-
-.member-header {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.01);
-  border-radius: 10px;
-}
-
-.member-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* 详情对话框中的用户名样式 */
-.member-info .member-name {
-  font-size: 24px;
-  margin: 0 0 5px;
-  color: var(--text-color);
-}
-
-.member-id {
-  margin: 0 0 5px;
-  color: #909399;
-  font-size: 14px;
-}
-
-.detail-section {
-  margin-bottom: 30px;
-}
-
-.detail-title {
-  font-size: 18px;
-  color: var(--text-color);
-  margin: 0 0 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0;
-  position: relative;
-}
-
-.detail-title::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 40px;
-  height: 3px;
-  background: var(--primary-color);
-  border-radius: 3px;
-}
-
-.performance-stats {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.performance-item {
-  background: linear-gradient(135deg, #ffffff, #f7faff);
-  border-radius: 10px;
-  padding: 20px;
-  flex: 1;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.performance-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-}
-
-.performance-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
-  color: #4b7bec;
-}
-
-.performance-value {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  background: linear-gradient(90deg, #e67e22, #f7b731);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.performance-label {
-  font-size: 14px;
-  color: #606266;
-}
-
-/* 响应式设计 */
-@media (max-width: 992px) {
-  .top-cards-row {
-    flex-direction: column;
-  }
-  
-  .camp-selector-card {
-    flex: none;
-    width: 100%;
-  }
-}
-
+/* 响应式调整 */
 @media (max-width: 768px) {
-  .stats-wrapper {
-    flex-direction: column;
-    gap: 16px;
+  .metrics-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px 20px;
   }
   
-  .stat-divider {
-    display: none;
+  .metric-item {
+    width: 45%;
   }
   
-  .main-content {
-    padding: 16px;
+  .camp-selector-item {
+    width: 100%;
+    margin-bottom: 20px;
+    order: -1;
   }
   
-  .search-input {
-    width: 150px;
+  .camp-period-title {
+    height: 80px;
+    font-size: 17px;
   }
   
+  .camp-period-title::after {
+    bottom: 18px;
+    width: 28px;
+    height: 3px;
+  }
+  
+  .metric-circle {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .metric-label {
+    font-size: 13px;
+  }
+  
+  .selector-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 576px) {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
   }
   
-  .page-actions {
-    align-self: flex-end;
+  .page-title-wrapper {
+    margin-bottom: 15px;
   }
-}
-
-@media (max-width: 480px) {
-  .performance-stats {
+  
+  .metrics-container {
     flex-direction: column;
-  }
-}
-
-/* 佣金单元格样式 */
-.commission-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.commission-btn {
-  opacity: 0.8;
-  transition: all 0.2s;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  background-color: #409EFF;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.commission-btn i {
-  font-size: 16px;
-  line-height: 1;
-}
-
-.commission-btn:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* 成员佣金明细对话框样式 */
-.commission-dialog {
-  .commission-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #ebeef5;
-    padding-bottom: 20px;
-  }
-  
-  .commission-info {
-    flex: 1;
-  }
-  
-  .info-row {
-    margin-bottom: 12px;
-    display: flex;
     align-items: center;
+    padding: 25px 15px;
   }
   
-  .info-label {
-    width: 120px;
-    color: #606266;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .info-value {
-    color: #333;
-    font-weight: 500;
-  }
-  
-  .commission-stats {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  .metric-item, .camp-selector-item {
     width: 100%;
-    margin-top: 15px;
+    margin-bottom: 20px;
   }
   
-  .stat-box {
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
+  .camp-period-title {
+    height: 70px;
+    font-size: 15px;
+  }
+  
+  .camp-period-title::after {
+    bottom: 18px;
+    width: 28px;
+    height: 3px;
+  }
+  
+  .metric-circle {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .metric-label {
+    font-size: 12px;
+  }
+  
+  .selector-controls {
     justify-content: center;
-    flex: 1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s;
-    min-width: 180px;
-    text-align: center;
-  }
-
-  .stat-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   }
   
-  .commission-box {
-    background-color: #fff8f0;
-  }
-  
-  .conversion-box {
-    background-color: #f0f8ff;
-  }
-  
-  .stat-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .stat-label {
-    color: #606266;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-  
-  .stat-value {
-    font-size: 30px;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-  
-  .commission-box .stat-value {
-    color: #ff9800;
-  }
-  
-  .conversion-box .stat-value {
-    color: #2196f3;
-  }
-  
-  .commission-table-wrapper {
-    margin-top: 20px;
-  }
-  
-  .commission-table {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  }
-  
-  :deep(.commission-table-header) {
-    background: linear-gradient(to right, #f9f9f9, #f5f5f5) !important;
-    color: #606266;
-    font-weight: 600;
-  }
-  
-  :deep(.commission-table-row:hover) {
-    background-color: #f9f9f9 !important;
-  }
-  
-  .commission-amount {
-    font-weight: 600;
-    color: #e67e22;
-  }
-  
-  .loading-container {
-    padding: 30px 0;
-  }
-  
-  .empty-data {
-    display: flex;
-    justify-content: center;
-    padding: 40px 0;
-  }
-  
-  .info-key {
-    color: #606266;
-    margin-right: 5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-  }
-  
-  .info-item {
-    margin-bottom: 5px;
+  .selector-value {
+    font-size: 26px;
   }
 }
 </style> 

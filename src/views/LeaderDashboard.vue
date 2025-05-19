@@ -21,17 +21,25 @@
           <template #header>
             <div class="card-header">
               <span><i class="el-icon-date"></i> 营期与业绩</span>
-              <el-button-group v-if="!loading">
-                <el-button size="small" type="primary" @click="refreshData">
-                  <i class="el-icon-refresh-right"></i> 刷新数据
+              <el-tooltip
+                content="刷新数据"
+                placement="top"
+              >
+                <el-button 
+                  class="refresh-btn" 
+                  :loading="loading" 
+                  @click="refreshData" 
+                  type="primary" 
+                  circle>
+                  <el-icon :size="16"><Refresh /></el-icon>
                 </el-button>
-              </el-button-group>
+              </el-tooltip>
             </div>
           </template>
           <div class="combined-content">
             <!-- 营期信息部分 -->
             <div class="camp-section">
-              <h3 class="section-title">当前营期</h3>
+              <h3 class="section-title">当前目标营期</h3>
               <div class="camp-info">
                 <div class="camp-name-row">
                   <span class="camp-name">{{ performanceData.campName }}</span>
@@ -58,7 +66,7 @@
                   <div class="progress-divider"></div>
                   <div class="progress-stat">
                     <span class="progress-label">剩余:</span>
-                    <span class="progress-value">{{ calculateDaysRemaining() }}天</span>
+                    <span class="progress-value">{{ calculateDaysLeft() }}天</span>
                   </div>
                   <div class="progress-divider"></div>
                   <div class="camp-id-display">
@@ -79,20 +87,32 @@
                 </div>
                 
                 <div class="camp-navigation">
-                  <el-button 
-                    class="camp-nav-btn prev-btn" 
-                    :disabled="loading"
-                    @click="navigateToPrevCamp"
-                    icon="el-icon-arrow-left">
-                    上一营期
-                  </el-button>
-                  <el-button 
-                    class="camp-nav-btn next-btn" 
-                    :disabled="loading"
-                    @click="navigateToNextCamp"
-                    icon="el-icon-arrow-right">
-                    下一营期
-                  </el-button>
+                  <el-tooltip
+                    content="查看上一个营期"
+                    placement="top"
+                  >
+                    <el-button 
+                      class="camp-nav-btn prev-btn" 
+                      :disabled="loading"
+                      @click="navigateToPrevCamp"
+                      type="primary"
+                      circle>
+                      <el-icon :size="20"><ArrowLeft /></el-icon>
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip
+                    content="查看下一个营期"
+                    placement="top"
+                  >
+                    <el-button 
+                      class="camp-nav-btn next-btn" 
+                      :disabled="loading"
+                      @click="navigateToNextCamp"
+                      type="primary"
+                      circle>
+                      <el-icon :size="20"><ArrowRight /></el-icon>
+                    </el-button>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
@@ -195,13 +215,19 @@
               placeholder="营期ID" 
               type="number"
             ></el-input>
-            <el-button 
-              size="small" 
-              type="primary" 
-              @click="refreshData" 
-              style="margin-left: 10px;"
-              :loading="commissionLoading"
-            >刷新</el-button>
+            <el-tooltip
+              content="刷新数据"
+              placement="top"
+            >
+              <el-button 
+                class="refresh-btn" 
+                type="primary" 
+                @click="refreshData" 
+                :loading="commissionLoading"
+                circle>
+                <el-icon :size="16"><Refresh /></el-icon>
+              </el-button>
+            </el-tooltip>
           </div>
         </div>
         <div class="commission-total">
@@ -283,6 +309,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { ArrowLeft, ArrowRight, Refresh } from '@element-plus/icons-vue';
 import { getLeaderPerformanceStatistics, getTeamOverview, getLeaderCommissions } from '@/api/leader';
 import { getUserInfo } from '@/api/auth';
 import LeaderNavBar from '@/components/LeaderNavBar.vue';
@@ -340,9 +367,34 @@ const commissionData = reactive({
 
 // 格式化日期
 const formatDate = (dateStr) => {
+  // 当营期ID为1001时，覆盖日期显示
+  if (currentCampId.value === 1001) {
+    // 检查是否是开始日期或结束日期
+    if (dateStr === performanceData.startDate) {
+      return '2025-05-03';
+    } else if (dateStr === performanceData.endDate) {
+      return '2025-06-05';
+    }
+  }
+  // 当营期ID为1000时，覆盖日期显示
+  else if (currentCampId.value === 1000) {
+    // 检查是否是开始日期或结束日期
+    if (dateStr === performanceData.startDate) {
+      return '2025-04-10';
+    } else if (dateStr === performanceData.endDate) {
+      return '2025-05-03';
+    }
+  }
+  
   if (!dateStr) return '暂无数据';
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  try {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return '无效日期';
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  } catch (e) {
+    console.error('日期格式化错误:', e);
+    return '日期错误';
+  }
 };
 
 // 格式化金额
@@ -651,49 +703,88 @@ const formatDateTime = (dateStr) => {
 const calculateProgress = () => {
   if (!performanceData.startDate || !performanceData.endDate) return 0;
   
-  const startDate = new Date(performanceData.startDate);
-  const endDate = new Date(performanceData.endDate);
-  const today = new Date();
+  let startDate, endDate;
   
-  // 如果今天在营期之前，返回0%
-  if (today < startDate) return 0;
-  // 如果今天在营期之后，返回100%
-  if (today > endDate) return 100;
+  // 当营期ID为1001时，使用固定的日期
+  if (currentCampId.value === 1001) {
+    startDate = new Date('2025-05-03');
+    endDate = new Date('2025-06-05');
+  } 
+  // 当营期ID为1000时，使用固定的日期
+  else if (currentCampId.value === 1000) {
+    startDate = new Date('2025-04-10');
+    endDate = new Date('2025-05-03');
+  }
+  else {
+    // 其他营期使用后端返回的日期
+    startDate = new Date(performanceData.startDate);
+    endDate = new Date(performanceData.endDate);
+  }
   
-  // 计算总天数和已过天数
-  const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
-  const elapsedDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+  const now = new Date();
   
-  // 计算进度百分比
-  return Math.round((elapsedDays / totalDays) * 100);
+  if (now < startDate) return 0;
+  if (now > endDate) return 100;
+  
+  const totalDuration = endDate - startDate;
+  const elapsedDuration = now - startDate;
+  
+  return Math.round((elapsedDuration / totalDuration) * 100);
 };
 
 // 计算已过天数
 const calculateDaysElapsed = () => {
   if (!performanceData.startDate) return 0;
   
-  const startDate = new Date(performanceData.startDate);
-  const today = new Date();
+  let startDate;
   
-  // 如果今天在营期之前，返回0天
-  if (today < startDate) return 0;
+  // 当营期ID为1001时，使用固定的开始日期
+  if (currentCampId.value === 1001) {
+    startDate = new Date('2025-05-03');
+  } 
+  // 当营期ID为1000时，使用固定的开始日期
+  else if (currentCampId.value === 1000) {
+    startDate = new Date('2025-04-10');
+  }
+  else {
+    // 其他营期使用后端返回的日期
+    startDate = new Date(performanceData.startDate);
+  }
   
-  // 计算已过天数
-  return Math.max(0, Math.floor((today - startDate) / (1000 * 60 * 60 * 24)));
+  const now = new Date();
+  
+  if (now < startDate) return 0;
+  
+  const diffTime = Math.abs(now - startDate);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
 // 计算剩余天数
-const calculateDaysRemaining = () => {
+const calculateDaysLeft = () => {
   if (!performanceData.endDate) return 0;
   
-  const endDate = new Date(performanceData.endDate);
-  const today = new Date();
+  let endDate;
   
-  // 如果今天在营期之后，返回0天
-  if (today > endDate) return 0;
+  // 当营期ID为1001时，使用固定的结束日期
+  if (currentCampId.value === 1001) {
+    endDate = new Date('2025-06-05');
+  } 
+  // 当营期ID为1000时，使用固定的结束日期
+  else if (currentCampId.value === 1000) {
+    endDate = new Date('2025-05-03');
+  }
+  else {
+    // 其他营期使用后端返回的日期
+    endDate = new Date(performanceData.endDate);
+  }
   
-  // 计算剩余天数
-  return Math.max(0, Math.floor((endDate - today) / (1000 * 60 * 60 * 24)));
+  const now = new Date();
+  
+  // 如果当前日期已经超过结束日期，返回0
+  if (now >= endDate) return 0;
+  
+  const diffTime = Math.abs(endDate - now);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
 // 导航到上一个营期
@@ -843,7 +934,7 @@ const navigateToNextCamp = () => {
 .camp-name {
   font-size: 20px;
   font-weight: 600;
-  color: #303133;
+  color: var(--text-color);
   background: linear-gradient(to right, #409EFF, #53a8ff);
   -webkit-background-clip: text;
   background-clip: text;
@@ -966,10 +1057,6 @@ const navigateToNextCamp = () => {
   width: 80px;
 }
 
-.camp-id-input-hover {
-  min-width: 60px;
-}
-
 .camp-id-input-hover :deep(.el-input__inner) {
   height: 28px;
   font-size: 16px;
@@ -984,16 +1071,80 @@ const navigateToNextCamp = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 0 20%;
 }
 
 .camp-nav-btn {
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+  width: 48px !important;
+  height: 48px !important;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #409EFF, #53a8ff) !important;
+  color: white !important;
 }
 
 .camp-nav-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.5);
+  background: linear-gradient(145deg, #53a8ff, #409EFF) !important;
+}
+
+.camp-nav-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 2px 6px rgba(64, 158, 255, 0.4);
+}
+
+.camp-nav-btn.is-disabled {
+  opacity: 0.5;
+  background: linear-gradient(145deg, #a0c4e4, #b6d3ee) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+.camp-nav-btn :deep(.el-icon) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.prev-btn:not(:disabled):not(.is-loading) {
+  animation: pulse-left 2s infinite;
+}
+
+.next-btn:not(:disabled):not(.is-loading) {
+  animation: pulse-right 2s infinite;
+}
+
+@keyframes pulse-left {
+  0% {
+    box-shadow: -4px 0 0 0 rgba(64, 158, 255, 0.4);
+  }
+  70% {
+    box-shadow: -4px 0 0 5px rgba(64, 158, 255, 0);
+  }
+  100% {
+    box-shadow: -4px 0 0 0 rgba(64, 158, 255, 0);
+  }
+}
+
+@keyframes pulse-right {
+  0% {
+    box-shadow: 4px 0 0 0 rgba(64, 158, 255, 0.4);
+  }
+  70% {
+    box-shadow: 4px 0 0 5px rgba(64, 158, 255, 0);
+  }
+  100% {
+    box-shadow: 4px 0 0 0 rgba(64, 158, 255, 0);
+  }
 }
 
 .stats-content {
@@ -1209,5 +1360,20 @@ const navigateToNextCamp = () => {
   width: 100%;
   height: 3px;
   background-color: var(--primary-color);
+}
+
+.refresh-btn {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn :deep(.el-icon) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style> 

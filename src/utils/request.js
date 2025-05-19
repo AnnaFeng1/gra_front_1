@@ -30,12 +30,18 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         const res = response.data;
+        console.log('原始API响应:', res);
 
         // 检查响应数据是否符合预期格式
         if (typeof res !== 'object') {
             console.error('API返回格式错误:', res);
             ElMessage.error('API返回格式错误');
             return Promise.reject(new Error('API返回格式错误'));
+        }
+
+        // 处理后端返回的字段名可能是message而不是msg的情况
+        if (res.message !== undefined && res.msg === undefined) {
+            res.msg = res.message;
         }
 
         // 确保响应数据中包含code字段，如果没有则添加默认值

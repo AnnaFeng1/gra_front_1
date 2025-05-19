@@ -1,0 +1,1 @@
+import{s as o}from"./index-Bt0verpb.js";function n(e,r){return o({url:"/api/auth/login",method:"post",data:{username:e,password:r}})}function a(){return Promise.resolve({code:1,msg:"登出成功",data:null})}function s(){return o({url:"/api/user/profile",method:"get"})}export{a,s as g,n as l};
