@@ -1,0 +1,80 @@
+/* 自定义ElementPlus tooltip样式 */
+
+/* 调整tooltip整体样式 - 更简洁、更小 */
+.el-popper {
+    background: #409EFF !important;
+    /* 纯色背景 */
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    /* 较小的圆角 */
+    padding: 6px 10px !important;
+    /* 减小内边距 */
+    font-size: 12px !important;
+    /* 减小字体大小 */
+    font-weight: normal !important;
+    line-height: 1.4 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+    /* 减轻阴影 */
+    transition: opacity 0.2s !important;
+    max-width: 250px !important;
+    word-break: break-word !important;
+    text-align: center !important;
+    pointer-events: none !important;
+}
+
+/* 隐藏小三角箭头 */
+.el-popper .el-popper__arrow {
+    display: none !important;
+}
+
+/* 不同类型tooltip的颜色变体 - 简化 */
+.el-popper.is-dark {
+    background: #409EFF !important;
+}
+
+.el-popper.is-light {
+    background: #ffffff !important;
+    color: #303133 !important;
+    border: 1px solid #e4e7ed !important;
+}
+
+/* 针对不同类型按钮的tooltip - 简化 */
+.el-button--primary+.el-popper {
+    background: #409EFF !important;
+}
+
+.el-button--success+.el-popper {
+    background: #67C23A !important;
+}
+
+.el-button--warning+.el-popper {
+    background: #E6A23C !important;
+}
+
+.el-button--danger+.el-popper {
+    background: #F56C6C !important;
+}
+
+.el-button--info+.el-popper {
+    background: #909399 !important;
+}
+
+/* Tooltip进入和离开动画 - 简化 */
+.el-popper.is-transitioning {
+    transition: opacity 0.2s !important;
+}
+
+.el-popper.is-light .el-popper__arrow::before {
+    display: none !important;
+}
+
+/* 自定义主题类 - 简化 */
+.el-popper.is-customized {
+    background: #409EFF !important;
+    color: white !important;
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+    display: none !important;
+}

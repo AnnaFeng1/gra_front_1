@@ -133,7 +133,19 @@
               目标 <span class="highlight">{{ progress.required_count || 50 }}</span> 人
             </div>
             <div class="progress-actions">
-              <el-button type="primary" @click="handleApplyPromotion" class="promotion-btn">申请晋升</el-button>
+              <el-tooltip
+                :content="canApplyPromotion ? '点击申请晋升' : `还需要完成${remainingPromotions}个推广才能申请晋升`"
+                placement="top"
+                effect="light"
+              >
+                <el-button 
+                  type="primary" 
+                  @click="handleApplyPromotion" 
+                  class="promotion-btn"
+                  :disabled="!canApplyPromotion">
+                  {{ canApplyPromotion ? '申请晋升' : `还需${remainingPromotions}个推广` }}
+                </el-button>
+              </el-tooltip>
             </div>
           </div>
         </el-card>
@@ -549,10 +561,52 @@ const goToUserCenter = () => {
 // 申请晋升
 const handleApplyPromotion = async () => {
   try {
+    // 检查是否满足晋升条件
+    const currentProgress = progress.value.current_count || 0;
+    const requiredProgress = progress.value.required_count || 50;
+    
+    // 如果当前进度小于所需进度，显示错误提示并返回
+    if (currentProgress < requiredProgress) {
+      const remaining = requiredProgress - currentProgress;
+      ElMessage({
+        message: `晋升条件未满足！您当前还需要再完成${remaining}个推广才能申请晋升。`,
+        type: 'warning',
+        duration: 5000,
+        showClose: true
+      });
+      return;
+    }
+    
+    // 显示确认对话框
+    await ElMessage.confirm(`您当前已完成${currentProgress}个推广，满足晋升条件。确认申请晋升吗？`, '申请晋升', {
+      confirmButtonText: '确认申请',
+      cancelButtonText: '取消',
+      type: 'info'
+    });
+    
+    // 用户确认后，发送申请
     const res = await applyPromotion();
-    ElMessage.success(res.msg);
+    
+    // 成功提示
+    ElMessage({
+      message: res.msg || '申请晋升成功！您的申请已提交，请等待管理员审核。',
+      type: 'success',
+      duration: 3000
+    });
+    
+    // 刷新数据
+    await fetchProgress();
   } catch (error) {
-    ElMessage.error(error.message || '申请失败');
+    // 如果是用户取消操作，不显示错误
+    if (error === 'cancel') return;
+    
+    // 显示错误信息
+    ElMessage({
+      message: error.message || '申请晋升失败，请稍后重试',
+      type: 'error',
+      duration: 5000,
+      showClose: true
+    });
   }
 };
 
@@ -912,6 +966,21 @@ const formatCommissionAmount = (amount) => {
   // 默认返回
   return '￥0.00';
 };
+
+// 添加计算属性 - 在script setup部分的computed部分添加
+// 是否可以申请晋升
+const canApplyPromotion = computed(() => {
+  const currentCount = progress.value.current_count || 0;
+  const requiredCount = progress.value.required_count || 50;
+  return currentCount >= requiredCount;
+});
+
+// 还需要完成的推广数量
+const remainingPromotions = computed(() => {
+  const currentCount = progress.value.current_count || 0;
+  const requiredCount = progress.value.required_count || 50;
+  return Math.max(0, requiredCount - currentCount);
+});
 </script>
 
 <style scoped>
@@ -1302,9 +1371,30 @@ const formatCommissionAmount = (amount) => {
 }
 
 .promotion-btn {
-  padding: 10px 20px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
+  width: 150px;
+  height: 40px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.promotion-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.4);
+}
+
+.promotion-btn:disabled {
+  background-color: #a0cfff;
+  border-color: #a0cfff;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.promotion-btn:disabled:hover {
+  background-color: #a0cfff;
+  border-color: #a0cfff;
+  color: #ffffff;
 }
 
 .highlight {

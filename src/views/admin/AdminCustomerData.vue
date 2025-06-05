@@ -17,7 +17,7 @@
             type="primary"
             circle
             :loading="loading || statsLoading">
-            <el-icon :size="22"><RefreshRight /></el-icon>
+            <el-icon :size="16"><RefreshRight /></el-icon>
           </el-button>
         </el-tooltip>
       </div>
@@ -49,15 +49,11 @@
         
         <!-- 客户列表卡片 -->
         <div class="customer-list-card">
-          <!-- 列表标题和刷新按钮 -->
-          <div class="list-header">
+          <!-- 合并列表标题和搜索区域到同一区域 -->
+          <div class="filter-search-bar">
             <div class="title-section">
               <h3>客户列表</h3>
             </div>
-          </div>
-          
-          <!-- 过滤和搜索条件 -->
-          <div class="filter-search-bar">
             <div class="search-area">
               <div class="search-box">
                 <el-input
@@ -68,9 +64,6 @@
                   @clear="handleSearch"
                   @keyup.enter="handleSearch"
                 >
-                  <template #append>
-                    <el-button :icon="Search" @click="handleSearch"></el-button>
-                  </template>
                 </el-input>
               </div>
               <div class="filter-options">
@@ -101,11 +94,6 @@
                 <el-tag :type="scope.row.status === 'converted' ? 'success' : 'info'">
                   {{ scope.row.status === 'converted' ? '已转化' : '潜在客户' }}
                 </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="created_time" label="创建时间" min-width="180" sortable="custom">
-              <template #default="scope">
-                {{ formatDate(scope.row.created_time) }}
               </template>
             </el-table-column>
             
@@ -178,12 +166,6 @@
                   {{ customerDetail.status === 'converted' ? '已转化' : '潜在客户' }}
                 </el-tag>
               </el-descriptions-item>
-              <el-descriptions-item label="创建时间" label-class-name="label-bold">
-                {{ formatDate(customerDetail.created_at) }}
-              </el-descriptions-item>
-              <el-descriptions-item label="更新时间" label-class-name="label-bold">
-                {{ formatDate(customerDetail.updated_at) }}
-              </el-descriptions-item>
             </el-descriptions>
           </div>
           
@@ -254,9 +236,6 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="detailVisible = false">关闭</el-button>
-          <el-button type="primary" @click="exportCustomerDetail" :disabled="!customerDetail">
-            <el-icon><Download /></el-icon> 导出数据
-          </el-button>
         </span>
       </template>
     </el-dialog>
@@ -266,7 +245,7 @@
 <script setup>
 import AdminNavBar from '@/components/AdminNavBar.vue';
 import { ref, reactive, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { Search, Refresh, UserFilled, DataAnalysis, InfoFilled, Download, RefreshRight } from '@element-plus/icons-vue';
+import { Search, Refresh, UserFilled, DataAnalysis, InfoFilled, RefreshRight } from '@element-plus/icons-vue';
 import { getCustomerList, getCustomerDetail, getCustomerStatistics } from '@/api/admin';
 import { ElMessage } from 'element-plus';
 
@@ -490,68 +469,6 @@ const formatDate = (dateStr) => {
   }
 };
 
-// 导出客户详情数据
-const exportCustomerDetail = () => {
-  if (!customerDetail.value) return;
-  
-  try {
-    const customer = customerDetail.value;
-    
-    // 构建导出数据
-    const data = {
-      基本信息: {
-        客户ID: customer.id,
-        客户姓名: customer.name,
-        联系电话: customer.phone || '未设置',
-        电子邮箱: customer.email || '未设置',
-        客户状态: customer.status === 'converted' ? '已转化' : '潜在客户',
-        创建时间: formatDate(customer.created_at),
-        更新时间: formatDate(customer.updated_at)
-      }
-    };
-    
-    // 如果有转化记录，添加到导出数据中
-    if (customer.status === 'converted' && customer.camp_conversions && customer.camp_conversions.length > 0) {
-      data.转化记录 = customer.camp_conversions.map((record, index) => ({
-        序号: index + 1,
-        营期: record.camp_description,
-        营期ID: record.camp_id,
-        转化时间: formatDate(record.conversion_time),
-        推广大使: record.promoter_name,
-        推广大使ID: record.promoter_id,
-        订单ID: record.order_id
-      }));
-    }
-    
-    // 将数据转换为JSON字符串
-    const jsonString = JSON.stringify(data, null, 2);
-    
-    // 创建Blob对象
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    
-    // 创建URL
-    const url = URL.createObjectURL(blob);
-    
-    // 创建下载链接
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `客户详情_${customer.id}_${customer.name}.json`;
-    
-    // 触发下载
-    document.body.appendChild(link);
-    link.click();
-    
-    // 清理
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
-    ElMessage.success('客户详情数据导出成功');
-  } catch (error) {
-    console.error('导出客户详情失败:', error);
-    ElMessage.error('导出客户详情失败');
-  }
-};
-
 // 页面加载时执行
 onMounted(() => {
   isComponentMounted.value = true;
@@ -575,8 +492,8 @@ onBeforeUnmount(() => {
 }
 
 .content-container {
-  padding: 20px;
-  margin-top: 10px;
+  padding: 12px 20px;
+  margin-top: 0;
 }
 
 /* 页面标题和全局刷新按钮 */
@@ -584,32 +501,34 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ebeef5;
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #303133;
   margin: 0;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ebeef5;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 /* 全局刷新按钮样式 */
 .global-refresh-btn {
-  transition: all 0.4s ease;
-  box-shadow: 0 2px 10px rgba(64, 158, 255, 0.4);
-  width: 56px !important;
-  height: 56px !important;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+  width: 40px !important;
+  height: 40px !important;
   background: linear-gradient(145deg, #409EFF, #53a8ff) !important;
   border: none !important;
-  margin-left: 15px;
+  margin-left: 12px;
 }
 
 .global-refresh-btn:hover:not(:disabled) {
   transform: rotate(180deg) scale(1.05);
-  box-shadow: 0 5px 15px rgba(64, 158, 255, 0.7);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.6);
   background: linear-gradient(145deg, #53a8ff, #409EFF) !important;
 }
 
@@ -628,21 +547,12 @@ onBeforeUnmount(() => {
   opacity: 0.9;
 }
 
-.global-refresh-btn :deep(.is-loading) {
-  animation: rotate 1s linear infinite;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 @keyframes global-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(64, 158, 255, 0.5);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(64, 158, 255, 0);
+    box-shadow: 0 0 0 8px rgba(64, 158, 255, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(64, 158, 255, 0);
@@ -652,7 +562,7 @@ onBeforeUnmount(() => {
 .customer-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
 }
 
 /* 客户数据统计卡片样式 */
@@ -660,23 +570,23 @@ onBeforeUnmount(() => {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 14px 16px;
 }
 
 .stats-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .stats-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #303133;
   position: relative;
-  padding-left: 12px;
+  padding-left: 10px;
 }
 
 .stats-header h3:before {
@@ -684,8 +594,8 @@ onBeforeUnmount(() => {
   position: absolute;
   left: 0;
   top: 4px;
-  height: 16px;
-  width: 4px;
+  height: 14px;
+  width: 3px;
   background: linear-gradient(to bottom, #409EFF, #1677FF);
   border-radius: 2px;
 }
@@ -730,14 +640,20 @@ onBeforeUnmount(() => {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 16px 20px;
 }
 
-.list-header {
+.filter-search-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  padding-right: 0;
+}
+
+.title-section {
+  flex: 0 0 auto;
+  margin-right: 20px;
 }
 
 .title-section h3 {
@@ -747,6 +663,7 @@ onBeforeUnmount(() => {
   color: #303133;
   position: relative;
   padding-left: 12px;
+  white-space: nowrap;
 }
 
 .title-section h3:before {
@@ -760,31 +677,21 @@ onBeforeUnmount(() => {
   border-radius: 2px;
 }
 
-.header-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.filter-search-bar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-right: 8px;
-}
-
 .search-area {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .search-box {
-  width: 300px;
+  width: 260px;
+  margin-right: 10px;
 }
 
 .filter-options {
-  width: 180px;
+  width: 140px;
 }
 
 .filter-options :deep(.el-input__wrapper) {

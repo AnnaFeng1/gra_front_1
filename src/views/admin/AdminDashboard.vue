@@ -98,12 +98,12 @@
                     </el-button>
                   </el-tooltip>
                   <el-tooltip
-                    content="查看下一个营期"
+                    :content="currentCampId === 1001 ? '当前已是最近营期' : '查看下一个营期'"
                     placement="top"
                   >
                     <el-button 
                       class="camp-nav-btn next-btn" 
-                      :disabled="loading"
+                      :disabled="loading || currentCampId === 1001"
                       @click="navigateToNextCamp"
                       type="primary"
                       circle>
@@ -833,8 +833,8 @@ const renderTeamChart = () => {
     grid: {
       left: '5%',
       right: '5%',
-      bottom: '10%',
-      top: '20%',
+      bottom: '8%',
+      top: '18%',
       containLabel: true
     },
     xAxis: {
@@ -1035,8 +1035,8 @@ const renderAmbassadorChart = () => {
     grid: {
       left: '5%',
       right: '5%',
-      bottom: '10%',
-      top: '20%',
+      bottom: '8%',
+      top: '18%',
       containLabel: true
     },
     xAxis: {
@@ -1246,7 +1246,7 @@ const renderTrendsChart = () => {
     grid: {
       left: '3%',
       right: '4%',
-      bottom: '10%', // 增加底部空间，确保X轴标签完全显示
+      bottom: '8%', // 从10%减小到8%
       containLabel: true
     },
     xAxis: {
@@ -1501,6 +1501,13 @@ const navigateToPrevCamp = () => {
 // 导航到下一个营期
 const navigateToNextCamp = () => {
   if (loading.value || isLoading.value || marketingStarsData.loading) return;
+  
+  // 检查当前营期ID是否为1001，如果是则不允许进入下一个营期
+  if (currentCampId.value === 1001) {
+    ElMessage.warning('当前已是最近营期');
+    return;
+  }
+  
   currentCampId.value++;
   refreshData();
 };
@@ -2228,8 +2235,8 @@ onUnmounted(() => {
 
 /* 推广之星图表样式 */
 .marketing-stars-charts {
-  margin: 20px 0;
-  padding: 20px;
+  margin: 15px 0; /* 从20px减小到15px */
+  padding: 15px; /* 从20px减小到15px */
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -2292,7 +2299,7 @@ onUnmounted(() => {
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
   padding: 20px;
-  height: 380px;
+  height: 320px; /* 从380px减小到320px */
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -2346,7 +2353,7 @@ onUnmounted(() => {
   }
   
   .chart-card {
-    height: 340px;
+    height: 300px; /* 从340px减小到300px */
   }
 }
 
@@ -2369,8 +2376,8 @@ onUnmounted(() => {
 /* 创建水平排列的图表容器 */
 .charts-row-container {
   display: flex;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 20px;
+  margin-bottom: 16px; /* 从24px减小到16px */
   width: 100%;
 }
 
@@ -2381,7 +2388,7 @@ onUnmounted(() => {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-  padding: 24px;
+  padding: 16px; /* 从24px减小到16px */
   position: relative;
   min-width: 0; /* 确保flex子项可以缩小到小于其内容尺寸 */
 }
@@ -2403,7 +2410,15 @@ onUnmounted(() => {
 .trends-chart-content,
 .commission-chart-content {
   width: 100%;
-  height: 350px; /* 统一高度 */
+  height: 280px; /* 从350px减小到280px */
+  position: relative;
+}
+
+/* 调整图表内容高度保持一致 */
+.trends-chart-content,
+.commission-chart-content {
+  width: 100%;
+  height: 250px; /* 从280px进一步减小到250px */
   position: relative;
 }
 </style> 

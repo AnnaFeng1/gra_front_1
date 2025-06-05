@@ -171,6 +171,22 @@
               {{ scope.row.expected_team_name || '--' }}
             </template>
           </el-table-column>
+          <!-- 修改推广完成度列为已完成推广数 -->
+          <el-table-column label="已完成推广数" min-width="150" sortable="custom" prop="current_count">
+            <template #default="scope">
+              <div class="promotion-count">
+                <span class="promotion-value">{{ scope.row.current_count || 0 }}</span>
+                <span class="promotion-required">/ {{ scope.row.required_count || 50 }}</span>
+                <el-tag 
+                  :type="getPromotionStatus(scope.row)" 
+                  size="small" 
+                  class="promotion-tag"
+                >
+                  {{ scope.row.current_count >= (scope.row.required_count || 50) ? '已达标' : '未达标' }}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="created_at" label="申请时间" min-width="180" sortable="custom">
             <template #default="scope">
               {{ formatDate(scope.row.created_at) }}
@@ -1085,18 +1101,52 @@ const pageSize = ref(10);
       approving.value = true;
       
       try {
-        await approvePromotionApplication(applicationToApprove.value.id, 'approve');
+        const response = await approvePromotionApplication(applicationToApprove.value.id, 'approve');
         ElMessage.success('晋升申请已批准成功');
         approveVisible.value = false;
         
-        // 刷新申请列表
-        loadApplicationData();
-        // 同时刷新团队列表（因为批准后会创建新团队）
-        if (activeTab.value === 'teams') {
-          loadTeamData();
+        // 直接从列表中删除已批准的申请
+        applicationList.value = applicationList.value.filter(item => item.id !== applicationToApprove.value.id);
+        
+        // 更新申请总数
+        if (applicationTotal.value > 0) {
+          applicationTotal.value -= 1;
         }
+        
         // 更新未处理数量
-        fetchApplicationCount();
+        if (applicationCount.value > 0) {
+          applicationCount.value -= 1;
+        }
+        
+        // 如果响应中包含新创建的团队信息，直接添加到团队列表中
+        if (response?.data?.newTeam) {
+          const newTeam = response.data.newTeam;
+          
+          // 如果当前在团队列表页面，直接添加到列表中
+          if (activeTab.value === 'teams') {
+            // 添加到列表开头
+            teamList.value.unshift(newTeam);
+            // 如果当前不是第一页，可能需要调整分页
+            if (currentPage.value > 1) {
+              // 可以选择跳转到第一页或者其他处理方式
+              currentPage.value = 1;
+              loadTeamData();
+            }
+          } else if (applicationList.value.length === 0 && applicationPage.value > 1) {
+            // 如果当前申请页面已经没有数据且不是第一页，则返回上一页
+            applicationPage.value -= 1;
+            loadApplicationData();
+          }
+        } else {
+          // 如果没有返回新团队信息，则刷新团队列表
+          if (activeTab.value === 'teams') {
+            loadTeamData();
+          } else if (applicationList.value.length === 0 && applicationPage.value > 1) {
+            // 如果当前页面已经没有数据且不是第一页，则返回上一页
+            applicationPage.value -= 1;
+            loadApplicationData();
+          }
+        }
       } catch (error) {
         console.error('批准晋升申请失败:', error);
       } finally {
@@ -1117,14 +1167,28 @@ const pageSize = ref(10);
       rejecting.value = true;
       
       try {
-        await approvePromotionApplication(applicationToReject.value.id, 'reject');
+        const response = await approvePromotionApplication(applicationToReject.value.id, 'reject');
         ElMessage.success('晋升申请已拒绝');
         rejectVisible.value = false;
         
-        // 刷新申请列表
-        loadApplicationData();
+        // 直接从列表中删除已拒绝的申请
+        applicationList.value = applicationList.value.filter(item => item.id !== applicationToReject.value.id);
+        
+        // 更新申请总数
+        if (applicationTotal.value > 0) {
+          applicationTotal.value -= 1;
+        }
+        
         // 更新未处理数量
-        fetchApplicationCount();
+        if (applicationCount.value > 0) {
+          applicationCount.value -= 1;
+        }
+        
+        // 如果当前页面已经没有数据且不是第一页，则返回上一页
+        if (applicationList.value.length === 0 && applicationPage.value > 1) {
+          applicationPage.value -= 1;
+          loadApplicationData();
+        }
       } catch (error) {
         console.error('拒绝晋升申请失败:', error);
       } finally {
@@ -1262,7 +1326,14 @@ const pageSize = ref(10);
           formatter: function(params) {
             const data0 = params[0].data;
             const data1 = params[1].data;
-            return `${params[0].name}<br/>
+            // 获取当前索引对应的完整信息
+            const dataIndex = params[0].dataIndex;
+            const originalData = conversionHistory.value.history[conversionHistory.value.history.length - 1 - dataIndex];
+            const periodName = originalData ? originalData.period_name : '';
+            const periodId = originalData ? originalData.period_id : params[0].name;
+            
+            return `营期ID: ${periodId}<br/>
+                   营期名称: ${periodName}<br/>
                    转化数: ${data0.conversions} <br/>
                    佣金金额: ${formatCurrency(data1.commission)} 元`;
           }
@@ -1468,16 +1539,26 @@ const pageSize = ref(10);
       
       const history = [...conversionHistory.value.history].reverse(); // 反转数组以按时间顺序显示
       
-      const xAxisData = history.map(item => item.period_name);
+      // 修改此处，只提取营期ID而非完整的营期名称
+      const xAxisData = history.map(item => {
+        // 提取营期ID
+        return item.period_id ? String(item.period_id) : item.period_name;
+      });
+      
       const conversionData = history.map(item => ({
         value: parseInt(item.conversions) || 0, // 确保转化数为整数
         conversions: parseInt(item.conversions) || 0, // 确保转化数为整数
-        commission: item.commission
+        commission: item.commission,
+        period_id: item.period_id,
+        period_name: item.period_name
       }));
+      
       const commissionData = history.map(item => ({
         value: parseFloat(item.commission) || 0,
         conversions: parseInt(item.conversions) || 0, // 确保转化数为整数
-        commission: item.commission
+        commission: item.commission,
+        period_id: item.period_id,
+        period_name: item.period_name
       }));
       
       conversionChart.setOption({
@@ -2125,6 +2206,28 @@ const showAddMemberDialog = () => {
       }
     };
 
+    // 在script部分添加以下计算函数
+    // 计算推广完成度百分比
+    const calculatePromotionPercentage = (application) => {
+      const current = application.current_count || 0;
+      const required = application.required_count || 50;
+      return Math.min(100, Math.round((current / required) * 100));
+    };
+
+    // 获取推广状态
+    const getPromotionStatus = (application) => {
+      const current = application.current_count || 0;
+      const required = application.required_count || 50;
+      
+      if (current >= required * 1.5) {
+        return 'success'; // 绿色，超额完成
+      } else if (current >= required) {
+        return 'warning'; // 黄色，刚好完成
+      } else {
+        return 'exception'; // 红色，未完成
+      }
+    };
+
     return {
       // 组件生命周期
       onBeforeUnmount,
@@ -2272,6 +2375,10 @@ const showAddMemberDialog = () => {
       
       // 图标
       Money,
+      
+      // 晋升申请相关
+      calculatePromotionPercentage,
+      getPromotionStatus,
     };
   }
 };
@@ -2952,4 +3059,109 @@ const showAddMemberDialog = () => {
 }
 
 /* 响应式调整 */
+
+/* 推广完成度样式 */
+.promotion-progress {
+  padding: 5px 0;
+}
+
+.promotion-progress :deep(.el-progress-bar__outer) {
+  border-radius: 6px;
+  background-color: #f0f2f5;
+}
+
+.promotion-progress :deep(.el-progress-bar__inner) {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.promotion-progress :deep(.el-progress__text) {
+  font-size: 13px;
+  font-weight: bold;
+  color: #606266;
+}
+
+.promotion-progress :deep(.el-progress--success .el-progress-bar__inner) {
+  background-color: #67C23A;
+}
+
+.promotion-progress :deep(.el-progress--warning .el-progress-bar__inner) {
+  background-color: #E6A23C;
+}
+
+.promotion-progress :deep(.el-progress--exception .el-progress-bar__inner) {
+  background-color: #F56C6C;
+}
+
+/* 已完成推广数样式 */
+.promotion-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+}
+
+.promotion-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.promotion-required {
+  font-size: 14px;
+  color: #909399;
+}
+
+.promotion-tag {
+  margin-left: 5px;
+}
+
+/* 申请列表返回头部样式 */
+.return-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+}
+
+.return-header .left-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.return-header .section-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.return-header .application-search {
+  width: 300px;
+}
+
+/* 晋升申请徽标样式 */
+.application-btn {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+.badge :deep(.el-badge__content) {
+  border: 2px solid #fff;
+}
+
+.action-buttons-group :deep(.el-button--circle:hover) {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 18px rgba(64, 158, 255, 0.5);
+}
 </style> 
